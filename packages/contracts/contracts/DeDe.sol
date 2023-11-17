@@ -4,6 +4,8 @@ pragma solidity ^0.8.9;
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
 
+import { IEAS, Attestation } from "@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol";
+
 contract DeDe {
     uint public settlementDuration;
     uint public stakeAmount;
@@ -30,7 +32,7 @@ contract DeDe {
     event ShipmentPickedUp(uint shipmentId, address courier);
     event ShipmentCompleted(uint shipmentId, address courier);
 
-    constructor(uint _settlementDuration, uint _stakeAmount) payable {
+    constructor(uint _settlementDuration, uint _stakeAmount, IEAS _eas) payable {
         currentId = 0;
         stakeAmount = _stakeAmount;
         settlementDuration = _settlementDuration;
