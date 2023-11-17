@@ -39,6 +39,7 @@ contract DeDe {
 
     /**
      * @dev Request a shipment
+     * @dev Requires payment from whoever who makes the request
      */
     function requestShipment(uint _shipmentCost, address _sender, address _receiver) public payable {
         require(msg.value >= _shipmentCost, "Shipment cost insufficient");
@@ -63,6 +64,7 @@ contract DeDe {
 
     /**
      * @dev Pickup a shipment
+     * @dev Requires payment from courier
      */
     function pickUpShipment(uint _shipmentId) public payable {
         require(pickedUpShipments[_shipmentId] == false, "Shipment has already been picked up");
@@ -80,8 +82,11 @@ contract DeDe {
         emit ShipmentPickedUp(_shipmentId, msg.sender);
     }
 
-    /** TODO: Add attestations */
-    function completeShipment(uint _shipmentId) public payable {
+    /** 
+     * TODO: Add attestations
+     * @dev Stake is automatically returned
+     */
+    function completeShipment(uint _shipmentId) public {
         require(pickedUpShipments[_shipmentId] == true, "Shipment has not been picked up");
         require(fulfilledShipments[_shipmentId] == false, "Shipment has already been fulfilled");
 
@@ -141,9 +146,16 @@ contract DeDe {
             withdrawableBalance[shipment.courier] += shipment.shipmentCost;
         }
 
-        // If picked up but not fulfilled, the withdrawable balance opens for the sender
+        // If picked up but not fulfilled, the withdrawable balance opens for the requester
+        // The receiver also earns the stake as a compensation
         if (pickedUpShipments[_shipmentId] && !fulfilledShipments[_shipmentId]) {
-            withdrawableBalance[shipment.sender] += shipment.shipmentCost;
+            withdrawableBalance[shipment.paidBy] += shipment.shipmentCost;
+            withdrawableBalance[shipment.receiver] += shipment.stake;
+        }
+
+        // If it wasn't picked up at all, the shipment cost is refunded
+        if (!pickedUpShipments[_shipmentId] && !fulfilledShipments[_shipmentId]) {
+            withdrawableBalance[shipment.paidBy] += shipment.shipmentCost;
         }
     }
 
