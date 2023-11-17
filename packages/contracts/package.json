@@ -1,0 +1,53 @@
+{
+  "name": "contracts",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "mocha",
+    "start": "hardhat node --hostname 0.0.0.0",
+    "deploy": "hardhat deploy --network localhost",
+    "deploy:scroll_testnet": "hardhat deploy --network scroll_testnet --tags Contract",
+    "deploy:mumbai": "hardhat deploy --network mumbai",
+    "deploy:optimism_testnet": "hardhat deploy --network optimism_testnet",
+    "deploy:taiko_testnet": "hardhat deploy --network taiko_testnet",
+    "deploy:gnosis": "hardhat deploy --network gnosis",
+    "wallet": "hardhat new:wallet"
+  },
+  "author": "2manslkh",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@ethersproject/hardware-wallets": "^5.7.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomiclabs/hardhat-ethers": "2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@openzeppelin/contracts": "^4.9.0",
+    "@openzeppelin/contracts-upgradeable": "^4.9.0",
+    "@openzeppelin/hardhat-upgrades": "^1.27.0",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.2",
+    "@types/chai": "^4.2.0",
+    "@types/mocha": "^10.0.4",
+    "@types/node": "^20.9.1",
+    "chai": "^4.2.0",
+    "dotenv": "^16.3.1",
+    "ethers": "5.7.2",
+    "hardhat": "^2.19.1",
+    "hardhat-deploy": "^0.11.43",
+    "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "^2.8.8",
+    "prettier-plugin-solidity": "^1.2.0",
+    "solhint": "^3.4.1",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.8.2",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.3.2",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-foundry": "^1.0.1"
+  }
+}
