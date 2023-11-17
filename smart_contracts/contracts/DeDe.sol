@@ -8,10 +8,10 @@ contract DeDe {
     uint public settlementDuration;
     uint public stakeAmount;
     uint public currentId;
-    mapping (uint => Shipment) public shipments;
-    mapping (uint => bool) public pickedUpShipments;
-    mapping (uint => bool) public fulfilledShipments;
-    mapping (address => uint) public withdrawableBalance;
+    mapping(uint => Shipment) public shipments;
+    mapping(uint => bool) public pickedUpShipments;
+    mapping(uint => bool) public fulfilledShipments;
+    mapping(address => uint) public withdrawableBalance;
     address payable public owner;
 
     struct Shipment {
@@ -38,7 +38,7 @@ contract DeDe {
     }
 
     /**
-     * @dev Request a shipment
+     * @dev Request a shipment, called by a sender
      */
     function requestShipment(uint _shipmentCost, address _sender, address _receiver) public payable {
         require(msg.value >= _shipmentCost, "Shipment cost insufficient");
@@ -46,13 +46,23 @@ contract DeDe {
         currentId++;
         uint shipmentId = id;
 
-        Shipment memory shipment = Shipment(shipmentId, _shipmentCost, block.number + settlementDuration, stakeAmount, address(0), _sender, _receiver, msg.sender, true);
+        Shipment memory shipment = Shipment(
+            shipmentId,
+            _shipmentCost,
+            block.number + settlementDuration,
+            stakeAmount,
+            address(0),
+            _sender,
+            _receiver,
+            msg.sender,
+            true
+        );
         shipments[shipmentId] = shipment;
         emit ShipmentRequested(shipmentId, _sender, _receiver);
     }
 
     /**
-     * @dev Pickup a shipment
+     * @dev Pickup a shipment, called by the courier
      */
     function pickUpShipment(uint _shipmentId) public payable {
         require(pickedUpShipments[_shipmentId] == false, "Shipment has already been picked up");
