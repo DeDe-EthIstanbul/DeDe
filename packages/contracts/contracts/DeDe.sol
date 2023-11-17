@@ -8,10 +8,10 @@ contract DeDe {
     uint public settlementDuration;
     uint public stakeAmount;
     uint public currentId;
-    mapping (uint => Shipment) public shipments;
-    mapping (uint => bool) public pickedUpShipments;
-    mapping (uint => bool) public fulfilledShipments;
-    mapping (address => uint) public withdrawableBalance;
+    mapping(uint => Shipment) public shipments;
+    mapping(uint => bool) public pickedUpShipments;
+    mapping(uint => bool) public fulfilledShipments;
+    mapping(address => uint) public withdrawableBalance;
     address payable public owner;
 
     struct Shipment {
@@ -46,7 +46,17 @@ contract DeDe {
         currentId++;
         uint shipmentId = id;
 
-        Shipment memory shipment = Shipment(shipmentId, _shipmentCost, block.number + settlementDuration, stakeAmount, address(0), _sender, _receiver, msg.sender, true);
+        Shipment memory shipment = Shipment(
+            shipmentId,
+            _shipmentCost,
+            block.number + settlementDuration,
+            stakeAmount,
+            address(0),
+            _sender,
+            _receiver,
+            msg.sender,
+            true
+        );
         shipments[shipmentId] = shipment;
         emit ShipmentRequested(shipmentId, _sender, _receiver);
     }
@@ -94,14 +104,19 @@ contract DeDe {
      */
     function dispute(uint _shipmentId, address disputer) public {
         // TODO
+        // Would need to call to an insurance contract and settle things that way
     }
 
     /**
      * Called by the receiver. Only if the receiver is happy with the shipment, the courier gets paid.
      */
     function disburse(uint _shipmentId) public {
+        require(pickedUpShipments[_shipmentId] == true, "Shipment is not picked up");
+        require(fulfilledShipments[_shipmentId] == true, "Shipment is not fulfilled");
+
         Shipment memory shipment = shipments[_shipmentId];
         require(shipment.valid == true, "Shipment is not valid");
+        require(shipment.receiver == msg.sender, "Caller is not the receiver");
 
         // Set it to not valid anymore since its done
         shipment.valid = false;
@@ -117,6 +132,9 @@ contract DeDe {
         Shipment memory shipment = shipments[_shipmentId];
         require(shipment.valid == true, "Shipment is not valid");
         require(shipment.settlementDeadline <= block.number, "Shipment has not expired");
+
+        shipment.valid = false;
+        shipments[_shipmentId] = shipment;
 
         // If fulfilled but receiver didn't disburse, the withdrawable balance opens for the courier
         if (fulfilledShipments[_shipmentId]) {
