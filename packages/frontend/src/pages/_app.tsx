@@ -23,6 +23,7 @@ import {
 } from "@thirdweb-dev/chains";
 import { useState } from "react";
 import ChainContext from "@/context/Chain";
+import toast, { Toaster } from "react-hot-toast";
 
 const theme = {
   ...lightTheme,
@@ -81,6 +82,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </ThemeProvider>
       </ThirdwebProvider>
+      <Toaster />
     </ChainContext.Provider>
   );
 }
