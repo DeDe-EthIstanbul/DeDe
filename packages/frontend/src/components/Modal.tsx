@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
+import { useEAS } from "@/utils/attestations";
+import { useState } from "react";
 
 interface IModal {
   isOpen: boolean;

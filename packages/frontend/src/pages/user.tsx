@@ -1,14 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
-import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
+import {
+  ConnectWallet,
+  lightTheme,
+  useAddress,
+  useContract,
+  useContractWrite,
+} from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
 
 import { Avatar } from "@ensdomains/thorin";
+import BouncingLoader from "@/components/BouncingLoader";
 import Image from "next/image";
 import LocationIcon from "@/icons/location";
 import Modal from "@/components/Modal";
 import Navbar from "@/components/Navbar";
+import { SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
 import { Spinner } from "@ensdomains/thorin";
+// import DeDe Abi
+import dedeAbi from "../utils/DeDeABI.json";
+import { useDedeContract } from "@/utils/addresses";
+import { useEAS } from "@/utils/attestations";
 import { useRouter } from "next/router";
+import { utils } from "ethers";
 
 const mockData = [
   {
@@ -55,6 +68,7 @@ const mockData = [
 
 export default function UserHome() {
   const [loading, setLoading] = useState(false);
+  const [inTransaction, setInTransaction] = useState(false);
   const [pickup, setPickup] = useState<string | undefined>();
   const [dropoff, setDropoff] = useState<string | undefined>();
   const [cost, setCost] = useState<string | undefined>();
@@ -65,6 +79,17 @@ export default function UserHome() {
   const address = useAddress();
   const router = useRouter();
 
+  let eas = useEAS();
+  console.log(eas);
+
+  let dede = useDedeContract();
+  let { contract } = useContract(dede, dedeAbi);
+
+  let { mutateAsync, isLoading, error } = useContractWrite(
+    contract,
+    "requestShipment"
+  );
+
   useEffect(() => {
     if (pickup && dropoff && !loading) {
       setLoading(true);
@@ -73,8 +98,25 @@ export default function UserHome() {
         setEstimatedCost((Math.random() * 0.3).toFixed(3));
       }, 1000);
     }
-  }, [pickup, dropoff]);
 
+    if (error) {
+      setInTransaction(false);
+    }
+  }, [pickup, dropoff, error, loading]);
+
+  async function handleConfirmJob() {
+    console.log("🚀 | handleConfirmJob | error:", error);
+    console.log("🚀 | handleConfirmJob | isLoading:", isLoading);
+
+    setInTransaction(true);
+    let { receipt } = await mutateAsync({
+      args: ["0x6860542E55Fb9292e4c8b478FcEec724d3351C2e"],
+      overrides: {
+        value: utils.parseEther("0.01"), // send 0.1 native token with the contract call
+      },
+    });
+    setInTransaction(false);
+  }
   return (
     <main className="min-h-screen min-w-screen overflow-auto flex flex-col bg-brand-background text-brand-primary">
       <Navbar />
@@ -145,14 +187,26 @@ export default function UserHome() {
             Upon confirmation, you will have to make your payment and it will be
             instantly accessible to be picked up by any courier around you
           </p>
-          <img
-            src="/assets/dede_logo.png"
-            alt="DeDe"
-            className="w-28 h-auto my-11"
-          />
-          <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
-            Confirm Job
-          </button>
+          <div className="w-28 h-auto my-11">
+            {inTransaction && (
+              <BouncingLoader
+                isInTransaction={inTransaction}
+                setInTransaction={setInTransaction}
+                isLoading={loading}
+              />
+            )}
+            {!inTransaction && <img src="/assets/dede_logo.png" alt="DeDe" />}
+          </div>
+
+          {eas && (
+            <button
+              className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
+              onClick={() => handleConfirmJob()}
+            >
+              Confirm Job
+            </button>
+          )}
+
           <button
             className="font-bold w-full text-brand-primary rounded-lg py-3 font-sans mt-2"
             onClick={() => setIsOpen(false)}
