@@ -27,7 +27,6 @@ import toast, { Toaster } from "react-hot-toast";
 import type { AppProps } from "next/app";
 import ChainContext from "@/context/Chain";
 import { ThemeProvider } from "styled-components";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { useState } from "react";
 
 const theme = {
