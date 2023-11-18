@@ -26,6 +26,7 @@ const config: Config = {
           text: "#FEFEF2",
           accent: "#FFD562",
           danger: "#F75C5A",
+          success: "#30a46c",
           secondary: "#659098",
           primary: "#023039",
         },
