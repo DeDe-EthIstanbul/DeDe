@@ -68,10 +68,7 @@ export default function JobDetails({
               <p className="font-sans">{dedeScore} DeDe</p>
             </div>
           </div>
-          <button
-            className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
-            onClick={() => handlePickUp()}
-          >
+          <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
             Pick Up
           </button>
         </Disclosure.Panel>

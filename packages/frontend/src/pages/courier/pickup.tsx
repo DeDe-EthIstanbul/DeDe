@@ -11,15 +11,14 @@ import { useEffect, useState } from "react";
 
 import Image from "next/image";
 import Lottie from "react-lottie";
-import dynamic from "next/dynamic";
-
-const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 import Modal from "@/components/Modal";
 import { attestPickupDelivery } from "@/utils/attestations";
+import dynamic from "next/dynamic";
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
-import { attestPickupDelivery } from "@/utils/attestations";
+
+const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
 interface ScannedResult {
   signature: {
