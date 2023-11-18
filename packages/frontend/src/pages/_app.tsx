@@ -47,49 +47,45 @@ export default function App({ Component, pageProps }: AppProps) {
   // const [selectedChain, setSelectedChain] = useState<any>(Mumbai);
 
   return (
-    <UserProvider>
-      {/* <ChainContext.Provider value={{ selectedChain, setSelectedChain }}> */}
-      <ThirdwebProvider
-        supportedWallets={[
-          metamaskWallet(),
-          smartWallet(
-            embeddedWallet({
-              auth: {
-                options: ["email", "google"],
-              },
-            }),
-            config
-          ),
-          // safeWallet({
-          //   personalWallets: [
-          //     embeddedWallet({
-          //       auth: {
-          //         options: ["email", "google"],
-          //       },
-          //     }),
-          //   ],
-          // }),
-        ]}
-        clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
-        activeChain={Mumbai}
-        supportedChains={[
-          ArbitrumSepolia,
-          PolygonZkevmTestnet,
-          LineaTestnet,
-          ScrollSepoliaTestnet,
-          GnosisChiadoTestnet,
-          MantleTestnet,
-          CeloAlfajoresTestnet,
-          BaseSepoliaTestnet,
-        ]}
-      >
-        <ThemeProvider theme={theme}>
-          <ThorinGlobalStyles />
-          <Component {...pageProps} />
-        </ThemeProvider>
-        <Toaster />
-      </ThirdwebProvider>
-      {/* </ChainContext.Provider> */}
-    </UserProvider>
+    <ThirdwebProvider
+      supportedWallets={[
+        metamaskWallet(),
+        smartWallet(
+          embeddedWallet({
+            auth: {
+              options: ["email", "google"],
+            },
+          }),
+          config
+        ),
+        // safeWallet({
+        //   personalWallets: [
+        //     embeddedWallet({
+        //       auth: {
+        //         options: ["email", "google"],
+        //       },
+        //     }),
+        //   ],
+        // }),
+      ]}
+      clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
+      activeChain={Mumbai}
+      supportedChains={[
+        ArbitrumSepolia,
+        PolygonZkevmTestnet,
+        LineaTestnet,
+        ScrollSepoliaTestnet,
+        GnosisChiadoTestnet,
+        MantleTestnet,
+        CeloAlfajoresTestnet,
+        BaseSepoliaTestnet,
+      ]}
+    >
+      <ThemeProvider theme={theme}>
+        <ThorinGlobalStyles />
+        <Component {...pageProps} />
+      </ThemeProvider>
+      <Toaster />
+    </ThirdwebProvider>
   );
 }
