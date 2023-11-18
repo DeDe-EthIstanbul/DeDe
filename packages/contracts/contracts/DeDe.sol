@@ -51,9 +51,9 @@ contract DeDe is SchemaResolver {
      */
     struct ShipmentRequestedParams {
         uint bounty;
-        uint packageValue;
-        address sender;
-        address receiver;
+        // uint packageValue;
+        // address sender;
+        // address receiver;
     }
 
     struct ShipmentPickedUpParams {
@@ -87,11 +87,8 @@ contract DeDe is SchemaResolver {
     }
 
     function onAttest(Attestation calldata attestation, uint256 /*value*/) internal override returns (bool) {
-        if (attestation.schema == REQUESTED_SCHEMA) {
-            // Handle the attestation
-            ShipmentRequestedParams memory params = abi.decode(attestation.data, (ShipmentRequestedParams));
-            requestShipment(params);
-        } else if (attestation.schema == PICKED_UP_SCHEMA) {
+        
+        if (attestation.schema == PICKED_UP_SCHEMA) {
             ShipmentPickedUpParams memory params = abi.decode(attestation.data, (ShipmentPickedUpParams));
             pickUpShipment(params.shipmentId);
         } else if (attestation.schema == DELIVERED_SCHEMA) {
@@ -112,14 +109,16 @@ contract DeDe is SchemaResolver {
     }
 
     /**
-     * @dev Request a shipment
-     * @param request ShipmentReq struct
-
+     * @dev Request a shipment. Direct Contract Attestation
+     * @param receiver receiver of the shipment
      */
-    function requestShipment(ShipmentRequestedParams memory request) public payable {
-        require(msg.value >= request.bounty, "Shipment cost insufficient");
-        currentId++;
-        uint stakeAmount = request.packageValue / 2;
+    function requestShipment(address receiver) public payable {
+        // require(msg.value >= request.bounty, "Shipment cost insufficient");
+        // uint stakeAmount = request.packageValue / 2;
+
+        ShipmentRequestedParams memory request = ShipmentRequestedParams({
+            bounty: msg.value
+        });
 
         Shipment memory shipment = Shipment({
             id: currentId,
@@ -128,26 +127,29 @@ contract DeDe is SchemaResolver {
             settlementDeadline: block.timestamp + settlementDuration,
             // stake: stakeAmount,
             courier: address(0),
-            sender: request.sender,
-            receiver: request.receiver,
+            sender: msg.sender,
+            receiver: receiver,
             // paidBy: msg.sender,
             valid: true
         });
         shipments[currentId] = shipment;
 
+
+        currentId++;
+
         emit ShipmentRequested(
             currentId,
-            request.sender,
-            request.receiver,
+            msg.sender,
+            receiver,
             request.bounty,
             block.timestamp + settlementDuration
         );
 
-        eas.attest(
+        bytes32 uid = eas.attest(
             AttestationRequest({
                 schema: REQUESTED_SCHEMA,
                 data: AttestationRequestData({
-                    recipient: address(0), // No recipient
+                    recipient: receiver, // No recipient
                     expirationTime: NO_EXPIRATION_TIME, // No expiration time
                     revocable: true,
                     refUID: EMPTY_UID, // No references UI
