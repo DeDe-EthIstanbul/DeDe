@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 import { Avatar } from "@ensdomains/thorin";
-import LocationIcon from "@/icons/location";
+import Image from "next/image";
 import JobDetails from "@/components/JobDetails";
+import LocationIcon from "@/icons/location";
 // import Navbar from "@/components/Navbar";
 import dynamic from "next/dynamic";
+import { useDeliveryRequestAttestations } from "@/utils/graph";
+import { useRouter } from "next/router";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
@@ -58,6 +60,9 @@ export default function CourierHome() {
   const [type, setType] = useState<"user" | "courier" | undefined>();
   const address = useAddress();
   const router = useRouter();
+
+  let requests = useDeliveryRequestAttestations();
+  console.log("🚀 | CourierHome | requests:", requests);
 
   useEffect(() => {
     console.log({ address });

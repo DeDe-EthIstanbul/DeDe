@@ -1,7 +1,8 @@
+import { Disclosure } from "@headlessui/react";
 /* eslint-disable @next/next/no-img-element */
 import LocationIcon from "@/icons/location";
 import StarIcon from "@/icons/star";
-import { Disclosure } from "@headlessui/react";
+import { useSigner } from "@thirdweb-dev/react";
 
 interface IJobDetails {
   pickUp: string;
@@ -21,6 +22,8 @@ export default function JobDetails({
   distance,
   userRating,
 }: IJobDetails) {
+  let signer = useSigner();
+
   return (
     <div className="flex flex-col relative">
       {/* <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1"></div> */}
@@ -65,7 +68,10 @@ export default function JobDetails({
               <p className="font-sans">{dedeScore} DeDe</p>
             </div>
           </div>
-          <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
+          <button
+            className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
+            onClick={() => handlePickUp()}
+          >
             Pick Up
           </button>
         </Disclosure.Panel>

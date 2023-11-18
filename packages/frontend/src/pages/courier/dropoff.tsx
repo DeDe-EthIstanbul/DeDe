@@ -1,16 +1,24 @@
-/* eslint-disable @next/next/no-img-element */
-import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Lottie from "react-lottie";
-import dynamic from "next/dynamic";
+import * as animationData from "../../../public/assets/tick.json";
 
-const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
+/* eslint-disable @next/next/no-img-element */
+import {
+  ConnectWallet,
+  lightTheme,
+  useAddress,
+  useSigner,
+} from "@thirdweb-dev/react";
+import { useEffect, useState } from "react";
+
+import Image from "next/image";
+import Lottie from "react-lottie";
+import Modal from "@/components/Modal";
+import { attestDeliverDelivery } from "@/utils/attestations";
+import dynamic from "next/dynamic";
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
-import Modal from "@/components/Modal";
-import * as animationData from "../../../public/assets/tick.json";
+import { useRouter } from "next/router";
+
+const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
 interface ScannedResult {
   signature: {
@@ -39,6 +47,7 @@ export default function CourierDropoff() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
+  const signer = useSigner();
 
   const initiateScan = async () => {
     let command = {
@@ -53,7 +62,7 @@ export default function CourierDropoff() {
     try {
       // --- request NFC command execution ---
       res = await execHaloCmdWeb(command, {
-        statusCallback: (cause: any) => {
+        statusCallback: async (cause: any) => {
           if (cause === "init") {
             toast(
               "Please tap the tag to the back of your smartphone and hold it..."
@@ -66,6 +75,15 @@ export default function CourierDropoff() {
             toast.success(
               "Tag scanned successfully, post-processing the result..."
             );
+            if (signer && address) {
+              // Sign Transaction here
+              await attestDeliverDelivery(
+                command.message, // TODO Edit this
+                command.keyNo.toString(), // TODO Edit this
+                signer,
+                address
+              );
+            }
           } else {
             // toast(cause);
           }

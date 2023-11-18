@@ -1,3 +1,8 @@
+import { SignerOrProvider, useChainId, useSigner } from "@thirdweb-dev/react";
+import { useEffect, useState } from "react";
+
+import { Contract } from "ethers";
+
 export const getDeDeContractAddress = (
   chainId: number | undefined
 ): string | undefined => {
@@ -46,3 +51,21 @@ export const getDeDeContractAddress = (
 
   return contractAddress;
 };
+
+export function useDedeContract() {
+  const chainId: number | undefined = useChainId();
+  const [contract, setContract] = useState<string>();
+  useEffect(() => {
+    if (!chainId) {
+      return;
+    }
+    try {
+      let address = getDeDeContractAddress(chainId);
+      setContract(address);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [chainId]);
+
+  return contract;
+}
