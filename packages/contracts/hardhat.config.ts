@@ -292,6 +292,7 @@ module.exports = {
       polygonMumbai: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
       base_testnet: 'BEH7Y1KKMYDKNV4416SEV3EQ1PT9AWC4Y8',
       arbitrum_testnet: 'STF7WZSAWCWMECBKQAXMKA79XI8EMFE8CF',
+      polygon_zkvm_testnet: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
     },
     customChains: [
       {
@@ -356,6 +357,14 @@ module.exports = {
         urls: {
           apiURL: 'https://gnosis-chiado.blockscout.com/api',
           browserURL: 'https://gnosis-chiado.blockscout.com',
+        },
+      },
+      {
+        network: 'polygon_zkvm_testnet',
+        chainId: 1442,
+        urls: {
+          apiURL: 'https://api-testnet-zkevm.polygonscan.com/api',
+          browserURL: 'https://testnet-zkevm.polygonscan.com',
         },
       },
     ],
