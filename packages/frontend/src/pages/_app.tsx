@@ -16,17 +16,18 @@ import {
   ConnectWallet,
   ThirdwebProvider,
   embeddedWallet,
+  metamaskWallet,
   safeWallet,
   smartWallet,
 } from "@thirdweb-dev/react";
 import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
+import toast, { Toaster } from "react-hot-toast";
 
 import type { AppProps } from "next/app";
 import ChainContext from "@/context/Chain";
 import { ThemeProvider } from "styled-components";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
 const theme = {
   ...lightTheme,
@@ -50,6 +51,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
         <ThirdwebProvider
           supportedWallets={[
+            metamaskWallet(),
             smartWallet(
               embeddedWallet({
                 auth: {
@@ -58,15 +60,15 @@ export default function App({ Component, pageProps }: AppProps) {
               }),
               config
             ),
-            safeWallet({
-              personalWallets: [
-                embeddedWallet({
-                  auth: {
-                    options: ["email", "google"],
-                  },
-                }),
-              ],
-            }),
+            // safeWallet({
+            //   personalWallets: [
+            //     embeddedWallet({
+            //       auth: {
+            //         options: ["email", "google"],
+            //       },
+            //     }),
+            //   ],
+            // }),
           ]}
           clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
           activeChain={selectedChain}
