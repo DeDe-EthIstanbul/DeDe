@@ -57,16 +57,11 @@ export default function CourierPickup() {
   );
 
   const initiateScan = async () => {
-    let command = {
-      name: "sign",
-      keyNo: 1,
-      message: courierAttestion,
-    };
-
     let res;
 
     if (!signer || !address) {
       toast("Please wait a moment before trying again");
+      return;
     }
 
     setLoading(true);
@@ -80,15 +75,9 @@ export default function CourierPickup() {
     setLoading(false);
     toast.success("Attestation complete! Please tap the NFC tag");
     setCourierAttestation(attestationUID);
-    // Do I need to put this on chain?
 
     try {
       // --- request NFC command execution ---
-      console.log({
-        name: "sign",
-        keyNo: 1,
-        message: attestationUID,
-      });
       res = await execHaloCmdWeb(
         {
           name: "sign",
