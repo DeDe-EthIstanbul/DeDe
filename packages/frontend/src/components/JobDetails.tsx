@@ -2,7 +2,6 @@ import { Disclosure } from "@headlessui/react";
 /* eslint-disable @next/next/no-img-element */
 import LocationIcon from "@/icons/location";
 import StarIcon from "@/icons/star";
-import { attestPickupDelivery } from "@/utils/attestations";
 import { useSigner } from "@thirdweb-dev/react";
 
 interface IJobDetails {
@@ -25,12 +24,6 @@ export default function JobDetails({
 }: IJobDetails) {
   let signer = useSigner();
 
-  function handlePickUp() {
-    console.log("Pick Up");
-    if (signer) {
-      attestPickupDelivery("0x1234", "0x1234", signer, "0x1234");
-    }
-  }
   return (
     <div className="flex flex-col relative">
       {/* <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1"></div> */}
