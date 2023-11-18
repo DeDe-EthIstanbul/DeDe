@@ -59,31 +59,13 @@ export default function CourierDropoff() {
   const initiateScan = async () => {
     let res;
 
-    console.log(signer, address);
-    if (!signer || !address) {
-      toast("Please wait a moment before trying again");
-      return;
-    }
-
-    setLoading(true);
-    toast("Attesting the delivery, this may take awhile...");
-    const attestationUID = await attestDeliverDelivery(
-      ethers.utils.formatBytes32String(shipmentId),
-      `0x${pickupAttestationUID}`,
-      signer!,
-      address! // This would come from the frontend when we select the job
-    );
-    setLoading(false);
-    toast.success("Attestation complete! Please tap the NFC tag");
-    setCourierAttestation(attestationUID);
-
     try {
       // --- request NFC command execution ---
       res = await execHaloCmdWeb(
         {
           name: "sign",
           keyNo: 1,
-          message: attestationUID.slice(2),
+          message: pickupAttestationUID,
         },
         {
           statusCallback: async (cause: any) => {
@@ -131,7 +113,8 @@ export default function CourierDropoff() {
         signer,
         address // This would come from the frontend when we select the job
       );
-      console.log({ attestationUID }); // Put this on chain?
+      setCourierAttestation(attestationUID);
+      console.log({ attestationUID });
     }
     fetch("/api/dropoff")
       .then(() => setSuccess(true))
