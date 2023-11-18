@@ -61,7 +61,7 @@ export default function Web3Inbox() {
   return (
     <>
       {!isReady ? (
-        <div>Loading client...</div>
+        <div>Loading notifications...</div>
       ) : (
         <>
           {!address ? (

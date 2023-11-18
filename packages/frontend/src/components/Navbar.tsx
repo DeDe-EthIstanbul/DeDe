@@ -29,6 +29,8 @@ import {
   useStoreMessages,
 } from "@waku/react";
 import toast from "react-hot-toast";
+import NotificationIcon from "@/icons/notification";
+import Link from "next/link";
 
 export const decode = (type: string, encodedString: string) => {
   return abi.decode([type], encodedString)[0];
@@ -225,9 +227,14 @@ export default function Navbar({}: INavbar) {
         </div>
       </div>
       <PowerModal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <p className="font-bold text-xl font-sans text-brand-primary mb-3">
-          DeDe Score:
-        </p>
+        <div className="w-full flex flex-row items-center justify-between mb-3">
+          <p className="font-bold text-xl font-sans text-brand-primary">
+            DeDe Score:
+          </p>
+          <Link href="/notifications">
+            <NotificationIcon className="w-6 fill-brand-primary" />
+          </Link>
+        </div>
         <div className="relative">
           <div className="rounded-lg font-bold items-center justify-center bg-brand-text py-6 px-8 flex flex-col border border-brand-primary z-20">
             {mockData.reduce((acc, curr) => {
