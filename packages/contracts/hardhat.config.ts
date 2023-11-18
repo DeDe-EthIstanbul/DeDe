@@ -229,6 +229,12 @@ module.exports = {
       accounts: ACCOUNT,
       saveDeployments: true,
     },
+    polygon_zkvm_testnet: {
+      url: 'https://rpc.public.zkevm-test.net',
+      chainId: 1442,
+      accounts: ACCOUNT,
+      saveDeployments: true,
+    },
   },
   solidity: {
     compilers: [
@@ -280,6 +286,7 @@ module.exports = {
       scroll_testnet: '42069',
       mantle_testnet: '42069',
       linea_testnet: '42069',
+      gnosis_testnet: '42069',
       celo_testnet: '8NH96QIJ4ZVR6SN7Z89EVA6JIE1JHY16NS',
       sepolia: 'HRPUPRN4G9HKSBWFCCRW7I61C7HJPNKVGD',
       polygonMumbai: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
@@ -333,6 +340,22 @@ module.exports = {
         urls: {
           apiURL: 'https://api-goerli.basescan.org/api',
           browserURL: 'https://goerli.basescan.org/',
+        },
+      },
+      {
+        network: 'arbitrum_testnet',
+        chainId: 421614,
+        urls: {
+          apiURL: 'https://api-sepolia.arbiscan.io/api',
+          browserURL: 'https://sepolia.arbiscan.io',
+        },
+      },
+      {
+        network: 'gnosis_testnet',
+        chainId: 10200,
+        urls: {
+          apiURL: 'https://gnosis-chiado.blockscout.com/api',
+          browserURL: 'https://gnosis-chiado.blockscout.com',
         },
       },
     ],
