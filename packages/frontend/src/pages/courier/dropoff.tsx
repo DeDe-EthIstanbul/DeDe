@@ -84,7 +84,7 @@ export default function CourierDropoff() {
 
   const confirmDropoff = () => {
     // Send the signature to the smart contract
-    console.log(res);
+    console.log(res?.etherAddress);
     toast.success("Delivery confirmed!");
     setSuccess(true);
   };
@@ -112,6 +112,7 @@ export default function CourierDropoff() {
           Initiate Scan
         </button>
       </div>
+      <p>{res?.etherAddress}</p>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         {success ? (
           <div className="flex flex-col items-center justify-center">

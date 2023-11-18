@@ -38,7 +38,7 @@ const theme = {
 };
 
 const config = {
-  factoryAddress: "0x9fc5491Dc9D5166edeaCB0C10DB1f87F3312202b",
+  factoryAddress: "0x03e8f1356a5c8be3f3412f1b3987f629df6d2d62",
   clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
   gasless: true,
 };
@@ -71,6 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
       clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
       activeChain={Mumbai}
       supportedChains={[
+        Mumbai,
         ArbitrumSepolia,
         PolygonZkevmTestnet,
         LineaTestnet,

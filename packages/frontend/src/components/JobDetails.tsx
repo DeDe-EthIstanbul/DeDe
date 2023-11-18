@@ -23,8 +23,9 @@ export default function JobDetails({
 }: IJobDetails) {
   return (
     <div className="flex flex-col relative">
+      {/* <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1"></div> */}
       <Disclosure>
-        <Disclosure.Button className="flex flex-col w-full bg-brand-text rounded-t-lg rounded-b-lg ui-open:rounded-b-none px-4 py-3 gap-y-3 z-10 border-brand-primary border">
+        <Disclosure.Button className="flex flex-col w-full bg-brand-text rounded-t-lg rounded-b-lg ui-open:rounded-b-none px-4 py-3 gap-y-3 border-brand-primary border">
           <div className="flex flex-row w-full items-center justify-between">
             <p className="font-bold font-sans">Parcel Delivery</p>
             <p className="font-bold font-sans text-brand-success">{revenue}</p>
@@ -46,7 +47,7 @@ export default function JobDetails({
             </div>
           </div>
         </Disclosure.Button>
-        <Disclosure.Panel className="flex flex-col w-full bg-brand-text rounded-b-lg px-4 py-3 gap-y-3 z-10 border-t-0 border-brand-primary border">
+        <Disclosure.Panel className="flex flex-col w-full bg-brand-text rounded-b-lg px-4 py-3 gap-y-3 border-t-0 border-brand-primary border">
           <div className="grid grid-cols-2 w-full gap-3">
             <div className="flex flex-col">
               <p className="font-bold font-sans">User Rating</p>
@@ -68,7 +69,6 @@ export default function JobDetails({
             Pick Up
           </button>
         </Disclosure.Panel>
-        <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1"></div>
       </Disclosure>
     </div>
   );
