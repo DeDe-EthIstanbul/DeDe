@@ -3,100 +3,162 @@ import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Avatar } from "@ensdomains/thorin";
+import LocationIcon from "@/icons/location";
+import { Spinner } from "@ensdomains/thorin";
+import Modal from "@/components/Modal";
+import Navbar from "@/components/Navbar";
 
-export default function Home() {
-  const [type, setType] = useState<"user" | "courier" | undefined>();
+const mockData = [
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+];
+
+export default function UserHome() {
+  const [loading, setLoading] = useState(false);
+  const [pickup, setPickup] = useState<string | undefined>();
+  const [dropoff, setDropoff] = useState<string | undefined>();
+  const [cost, setCost] = useState<string | undefined>();
+  const [estimatedCost, setEstimatedCost] = useState<string>("0.00");
+  const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState(0);
+
   const address = useAddress();
   const router = useRouter();
 
   useEffect(() => {
-    if (type && address) {
-      router.push(`/${type}`);
+    if (pickup && dropoff && !loading) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setEstimatedCost((Math.random() * 0.3).toFixed(3));
+      }, 1000);
     }
-  }, [type, address, router]);
+  }, [pickup, dropoff]);
 
   return (
-    <main className="min-h-screen min-w-screen overflow-auto flex flex-col justify-between py-14 bg-brand-background text-brand-primary">
-      <div className="flex flex-col items-center">
-        <img src={"/assets/dede_logo.png"} alt="DeDe" className="px-16" />
+    <main className="min-h-screen min-w-screen overflow-auto flex flex-col bg-brand-background text-brand-primary">
+      <Navbar />
+
+      <div className="relative w-full h-full">
         <img
-          src={"/assets/dede_logotype.svg"}
-          alt="DeDe"
-          className="mt-12 w-40 h-auto"
+          src={"/assets/map.png"}
+          alt="Map"
+          className="w-full h-auto absolute top-0 left-0"
         />
-        <h1 className="mt-7 font-sans">Your Decentralized Delivery Network</h1>
+        <div className="relative flex flex-col">
+          <div className="absolute flex flex-col w-[90%] left-1/2 transform -translate-x-1/2 z-20">
+            <div className="flex flex-col rounded-lg bg-brand-text border border-brand-primary p-4 z-20">
+              <div className="flex flex-row items-center">
+                <LocationIcon className="h-4 fill-brand-primary" />
+                <input
+                  type="text"
+                  placeholder="Enter your pick up location"
+                  className="w-full rounded-lg px-3 py-2 placeholder:text-brand-secondary bg-transparent text-brand-primary"
+                  onChange={(e) => setPickup(e.target.value)}
+                />
+              </div>
+              <hr className="h-[2px] my-2" />
+              <div className="flex flex-row items-center">
+                <LocationIcon className="h-4 fill-brand-danger" />
+                <input
+                  type="text"
+                  placeholder="Enter your drop off location"
+                  className="w-full rounded-lg px-3 py-2 placeholder:text-brand-secondary bg-transparent text-brand-primary"
+                  onChange={(e) => setDropoff(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col items-center w-full gap-y-5">
-        <div
-          className="w-full items-center justify-center flex flex-row"
-          onClick={() => setType("user")}
-        >
-          <ConnectWallet
-            theme={lightTheme({
-              colors: {
-                modalBg: "#FEFEF2",
-                dropdownBg: "#FEFEF2",
-                primaryText: "#022D36",
-                secondaryText: "#659098",
-                borderColor: "#023039",
-                separatorLine: "#023039",
-                accentText: "#023039",
-                accentButtonBg: "#023039",
-                danger: "#F75C5A",
-                success: "#30a46c",
-                primaryButtonBg: "#022D36",
-                accentButtonText: "#FFFEF1",
-                primaryButtonText: "#FFFEF1",
-                secondaryButtonBg: "#97CED9",
-                secondaryButtonText: "#023039",
-                connectedButtonBg: "#FFFEF1",
-                secondaryButtonHoverBg: "#659098",
-              },
-              fontFamily: "Poppins, sans-serif",
-            })}
-            btnTitle={"Sign In As User"}
-            modalTitle={"Sign In To DeDe"}
-            switchToActiveChain={true}
-            modalSize={"compact"}
-            modalTitleIconUrl={"/assets/dede_logo.png"}
-            className="font-bold py-3 w-full font-sans"
-          />
+      <div className="absolute flex flex-col w-full rounded-t-lg bg-brand-text border border-brand-primary p-6 bottom-0">
+        <div className="flex flex-row items-center justify-between">
+          <p className="font-bold font-sans text-lg text-brand-primary">
+            Estimated Cost
+          </p>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <p className="font-bold font-sans text-lg text-brand-secondary">
+              ~ Ξ {estimatedCost}
+            </p>
+          )}
         </div>
-        <div
-          className="w-full items-center justify-center flex flex-row"
-          onClick={() => setType("courier")}
+        <input
+          type="text"
+          placeholder="Enter your best offer"
+          className="w-full rounded-lg border border-brand-primary p-3 placeholder:text-brand-secondary my-4 text-brand-primary"
+          onChange={(e) => setCost(e.target.value)}
+        />
+        <button
+          className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
+          onClick={() => setIsOpen(true)}
         >
-          <ConnectWallet
-            theme={lightTheme({
-              colors: {
-                modalBg: "#FEFEF2",
-                dropdownBg: "#FEFEF2",
-                primaryText: "#022D36",
-                secondaryText: "#659098",
-                borderColor: "#023039",
-                separatorLine: "#023039",
-                accentText: "#023039",
-                accentButtonBg: "#023039",
-                danger: "#F75C5A",
-                success: "#30a46c",
-                primaryButtonBg: "#FAF6DB",
-                accentButtonText: "#FFFEF1",
-                primaryButtonText: "#022D36",
-                secondaryButtonBg: "#97CED9",
-                secondaryButtonText: "#023039",
-                connectedButtonBg: "#FFFEF1",
-                secondaryButtonHoverBg: "#659098",
-              },
-              fontFamily: "Poppins, sans-serif",
-            })}
-            btnTitle={"Register As Courier"}
-            modalTitle={"Sign In To DeDe"}
-            switchToActiveChain={true}
-            modalSize={"compact"}
-            modalTitleIconUrl={"/assets/dede_logo.png"}
-            className="font-bold py-3 w-full font-sans"
+          Create Job
+        </button>
+        <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+          <p className="font-bold text-xl font-sans text-brand-primary mb-3">
+            Confirm Job?
+          </p>
+          <p className="text-sm font-sans text-brand-primary text-center">
+            Upon confirmation, you will have to make your payment and it will be
+            instantly accessible to be picked up by any courier around you
+          </p>
+          <img
+            src="/assets/dede_logo.png"
+            alt="DeDe"
+            className="w-28 h-auto my-11"
           />
-        </div>
+          <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
+            Confirm Job
+          </button>
+          <button
+            className="font-bold w-full text-brand-primary rounded-lg py-3 font-sans mt-2"
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </button>
+        </Modal>
       </div>
     </main>
   );

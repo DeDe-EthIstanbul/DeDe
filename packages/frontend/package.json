@@ -11,6 +11,8 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.3.0",
     "@ensdomains/thorin": "^0.6.44",
+    "@headlessui/react": "^1.7.17",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@thirdweb-dev/chains": "^0.1.58",
     "@thirdweb-dev/react": "^4.1.7",
     "@thirdweb-dev/sdk": "^4.0.14",
