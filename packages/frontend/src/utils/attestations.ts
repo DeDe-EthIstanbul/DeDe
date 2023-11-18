@@ -2,6 +2,14 @@ import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestat
 import { type SignerOrProvider, useChainId, useSigner } from "@thirdweb-dev/react";
 import { useEffect, useState } from 'react';
 
+import { Signer } from "ethers";
+
+let REQUESTED_SCHEMA = "0x5168144c45bf7c0758dc716151ef449b25c0b1583462da35d242d7a45660cb09"; //TODO
+let PICKED_UP_SCHEMA = "0x5c5b112092ac1af2aa778890732f8edf474efd8f1f1db3749f231018e3d0ca8d" //TODO
+let DELIVERED_SCHEMA = "0x05aa3b5bf919b9eaa9571ca139248d72297f44b7026d0d5b63e301039fb5271b" //TODO
+let COMPLETED_SCHEMA = "0xefdd971c2c78f490a565dcd1d00ffd349827b81d299f8aeee6de086e2b882f97" //TODO
+
+
 function getEASAddress(chainId: string) {
     let EAS_ADDRESS;
 
@@ -68,3 +76,54 @@ export const useEAS = (): EAS | undefined => {
 
     return contract;
 };
+
+// Initialize the sdk with the address of the EAS Schema contract address
+export const attestPickupDelivery = async (shipmentId: string, senderSignature: string, signer: SignerOrProvider, recipient: string) => {
+    const offchain = await eas.getOffchain();
+    const schemaEncoder = new SchemaEncoder("bytes32 shipmentId, bytes32 senderSignature");
+    const encodedData = schemaEncoder.encodeData([
+        { name: "shipmentId", value: shipmentId, type: "bytes32" },
+        { name: "senderSignature", value: senderSignature, type: "bytes32" },
+    ]);
+
+    const offchainAttestation = await offchain.signOffchainAttestation({
+        recipient: recipient,
+        // Unix timestamp of when attestation expires. (0 for no expiration)
+        expirationTime: BigInt(0),
+        // Unix timestamp of current time
+        time: BigInt(Math.floor(Date.now() / 1000)),
+        revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+        version: 1,
+        nonce: BigInt(0),
+        schema: PICKED_UP_SCHEMA,
+        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        data: encodedData,
+    }, signer as any);
+
+    return offchainAttestation;
+}
+
+export const attestDeliverDelivery = async (shipmentId: string, receiverSignature: string, signer: SignerOrProvider, recipient: string) => {
+    const offchain = await eas.getOffchain();
+    const schemaEncoder = new SchemaEncoder("bytes32 shipmentId, bytes32 receiverSignature");
+    const encodedData = schemaEncoder.encodeData([
+        { name: "shipmentId", value: shipmentId, type: "bytes32" },
+        { name: "receiverSignature", value: receiverSignature, type: "bytes32" },
+    ]);
+
+    const offchainAttestation = await offchain.signOffchainAttestation({
+        recipient: recipient,
+        // Unix timestamp of when attestation expires. (0 for no expiration)
+        expirationTime: BigInt(0),
+        // Unix timestamp of current time
+        time: BigInt(Math.floor(Date.now() / 1000)),
+        revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+        version: 1,
+        nonce: BigInt(0),
+        schema: DELIVERED_SCHEMA,
+        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        data: encodedData,
+    }, signer as any);
+
+    return offchainAttestation;
+}
