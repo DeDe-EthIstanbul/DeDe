@@ -19,10 +19,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }: any) => {
     // scroll testnet
     EAS_ADDRESS = '0x0000000000000000000000000000000000000001';
     console.log('EAS Not available on Scroll Testnet');
-  } else if (chainId == '42') {
+  } else if (chainId == '59140') {
     // linea testnet
     EAS_ADDRESS = '0xaEF4103A04090071165F78D45D83A0C0782c2B2a';
-  } else if (chainId == '42') {
+  } else if (chainId == '5001') {
     // mantle testnet
     EAS_ADDRESS = '0x0000000000000000000000000000000000000001';
     console.log('EAS Not available on Mantle Testnet');
