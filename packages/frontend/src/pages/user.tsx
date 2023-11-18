@@ -7,6 +7,7 @@ import { Avatar } from "@ensdomains/thorin";
 import LocationIcon from "@/icons/location";
 import { Spinner } from "@ensdomains/thorin";
 import Modal from "@/components/Modal";
+import Navbar from "@/components/Navbar";
 
 const mockData = [
   {
@@ -75,16 +76,7 @@ export default function UserHome() {
 
   return (
     <main className="min-h-screen min-w-screen overflow-auto flex flex-col bg-brand-background text-brand-primary">
-      <nav className="flex flex-row items-center justify-between w-full px-6 py-5">
-        <img
-          src={"/assets/dede_logotype.svg"}
-          alt="DeDe"
-          className="w-20 h-auto"
-        />
-        <div className="w-12 h-12">
-          <Avatar label="User Profile" src={"/assets/profile.png"} />
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="relative w-full h-full">
         <img
