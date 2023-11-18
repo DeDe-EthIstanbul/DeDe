@@ -26,6 +26,7 @@ import ChainContext from "@/context/Chain";
 import { ThemeProvider } from "styled-components";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const theme = {
   ...lightTheme,
@@ -85,6 +86,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </ThemeProvider>
         </ThirdwebProvider>
+        <Toaster />
       </ChainContext.Provider>
     </UserProvider>
   );

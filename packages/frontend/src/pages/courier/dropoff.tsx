@@ -30,7 +30,7 @@ const defaultOptions = {
   },
 };
 
-export default function CourierPickup() {
+export default function CourierDropoff() {
   const address = useAddress();
   const router = useRouter();
   const [res, setRes] = useState<ScannedResult | null>(null);
@@ -82,10 +82,10 @@ export default function CourierPickup() {
     }
   };
 
-  const confirmPickup = () => {
+  const confirmDropoff = () => {
     // Send the signature to the smart contract
     console.log(res);
-    toast.success("Pickup confirmed!");
+    toast.success("Delivery confirmed!");
     setSuccess(true);
   };
 
@@ -94,10 +94,11 @@ export default function CourierPickup() {
       <Navbar />
       <div className="flex flex-col w-full items-center justify-center px-6">
         <h1 className="font-bold text-xl font-sans mt-4">
-          Tap Pick Up NFC Tag
+          Tap Delivery NFC Tag
         </h1>
         <p className="font-sans text-center my-12">
-          You can find the NFC tag on the locker box of your pickup location.
+          You can find the NFC tag on the door, gate, locker or within the
+          vicinity of your delivery location.
         </p>
         <div className="flex rounded-lg overflow-hidden">
           <video autoPlay muted loop playsInline>
@@ -115,11 +116,10 @@ export default function CourierPickup() {
         {success ? (
           <div className="flex flex-col items-center justify-center">
             <p className="font-bold text-xl font-sans text-brand-primary mb-3">
-              Pickup Confirmed!
+              Delivery Confirmed!
             </p>
             <p className="text-sm font-sans text-brand-primary text-center">
-              Deliver your parcel before 12pm on 25th December 2023 to
-              successfully complete your task!
+              Congratulations! It is that easy to earn money with DeDe.
             </p>
 
             <Lottie options={defaultOptions} height={128} width={128} />
@@ -133,12 +133,12 @@ export default function CourierPickup() {
         ) : (
           <div className="flex flex-col items-center justify-center">
             <p className="font-bold text-xl font-sans text-brand-primary mb-3">
-              Confirm Pickup?
+              Confirm Delivery?
             </p>
             <p className="text-sm font-sans text-brand-primary text-center">
-              Failure to deliver your parcel will result in a penalty. Your DeDe
-              score will be reduced and you may be charged a fee based on the
-              item value.
+              Please ensure that your delivery items are correct. This action is
+              irreversible. Your DeDe score will be updated and your payment
+              will be awarded once the shipment is settled.
             </p>
             <img
               src="/assets/dede_logo.png"
@@ -147,9 +147,9 @@ export default function CourierPickup() {
             />
             <button
               className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
-              onClick={confirmPickup}
+              onClick={confirmDropoff}
             >
-              Confirm Pick Up
+              Confirm Delivery
             </button>
             <button
               className="font-bold w-full text-brand-primary rounded-lg py-3 font-sans mt-2"
