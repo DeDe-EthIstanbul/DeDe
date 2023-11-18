@@ -68,8 +68,6 @@ export default function Web3Inbox() {
             <div>Connect your wallet</div>
           ) : (
             <>
-              <div>Address: {address}</div>
-              <div>Account ID: {account}</div>
               {!isRegistered ? (
                 <div>
                   To manage notifications, sign and register an identity
@@ -88,21 +86,52 @@ export default function Web3Inbox() {
                       <button
                         onClick={performSubscribe}
                         disabled={isSubscribing}
+                        className="font-bold font-sans"
                       >
                         {isSubscribing
                           ? "Subscribing..."
-                          : "Subscribe to notifications"}
+                          : "🔔 Subscribe to notifications"}
                       </button>
                     </>
                   ) : (
                     <>
-                      <div>You are subscribed</div>
-                      <div>Subscription: {JSON.stringify(subscription)}</div>
-                      <div>Messages: {JSON.stringify(messages)}</div>
+                      <div className="font-sans font-bold">
+                        ✅ You are subscribed!
+                      </div>
+                      <p className="mt-6 mb-2 gap-y-3 font-sans font-bold">
+                        Notifications
+                      </p>
+                      {messages.length > 0 ? (
+                        messages.map((message) => {
+                          return (
+                            <div
+                              className="flex flex-col px-4 py-4 border border-brand-primary bg-brand-text rounded-lg"
+                              key={message.id}
+                            >
+                              <p className="font-bold font-sans mb-2">
+                                {message.message.title}
+                              </p>
+                              <p className="font-sans">
+                                {message.message.body}
+                              </p>
+                              <p className="font-sans text-sm italic mt-2">
+                                {new Date(message.publishedAt).toISOString()}
+                              </p>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="font-sans">No notifications yet</div>
+                      )}
                     </>
                   )}
                 </>
               )}
+              <div className="flex flex-col overflow-auto my-6">
+                <p className="my-2">Developer Info</p>
+                <div className="text-sm">Address: {address}</div>
+                <div className="text-sm">Account ID: {account}</div>
+              </div>
             </>
           )}
         </>
