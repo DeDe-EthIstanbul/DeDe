@@ -1,14 +1,17 @@
+import * as animationData from "../../../public/assets/tick.json";
+
 /* eslint-disable @next/next/no-img-element */
 import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+import Image from "next/image";
 import Lottie from "react-lottie";
+import Modal from "@/components/Modal";
 import Navbar from "@/components/Navbar";
+import { attestDeliverDelivery } from "@/utils/attestations";
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
-import Modal from "@/components/Modal";
-import * as animationData from "../../../public/assets/tick.json";
+import { useRouter } from "next/router";
 
 interface ScannedResult {
   signature: {
@@ -37,6 +40,7 @@ export default function CourierDropoff() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
+  const signer = useSigner();
 
   const initiateScan = async () => {
     let command = {
@@ -51,7 +55,7 @@ export default function CourierDropoff() {
     try {
       // --- request NFC command execution ---
       res = await execHaloCmdWeb(command, {
-        statusCallback: (cause: any) => {
+        statusCallback: async (cause: any) => {
           if (cause === "init") {
             toast(
               "Please tap the tag to the back of your smartphone and hold it..."
@@ -64,6 +68,15 @@ export default function CourierDropoff() {
             toast.success(
               "Tag scanned successfully, post-processing the result..."
             );
+            if (signer && address) {
+              // Sign Transaction here
+              await attestDeliverDelivery(
+                command.message, // TODO Edit this
+                command.keyNo.toString(), // TODO Edit this
+                signer,
+                address
+              );
+            }
           } else {
             // toast(cause);
           }
