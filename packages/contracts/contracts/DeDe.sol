@@ -7,9 +7,13 @@ pragma solidity ^0.8.9;
 import { SchemaResolver } from "@ethereum-attestation-service/eas-contracts/contracts/resolver/SchemaResolver.sol";
 import { IEAS, Attestation, AttestationRequest, AttestationRequestData } from "@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol";
 import { NO_EXPIRATION_TIME, EMPTY_UID } from "@ethereum-attestation-service/eas-contracts/contracts/Common.sol";
+import { WorldIDEnabled } from "./WorldIDEnabled.sol";
 
-contract DeDe is SchemaResolver {
+contract DeDe is WorldIDEnabled {
+    using ByteHasher for bytes;
+
     IEAS eas;
+
     uint public settlementDuration;
     uint public currentId;
     mapping(uint => Shipment) public shipments;
