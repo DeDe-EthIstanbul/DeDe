@@ -105,8 +105,11 @@ export default function CourierDropoff() {
   const confirmDropoff = () => {
     // Send the signature to the smart contract
     console.log(res?.etherAddress);
-    toast.success("Delivery confirmed!");
-    setSuccess(true);
+    toast.success("Delivery confirming!");
+    fetch("/api/dropoff")
+      .then(() => setSuccess(true))
+      .finally(() => setLoading(false));
+    setLoading(true);
   };
 
   return (

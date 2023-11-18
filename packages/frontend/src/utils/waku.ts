@@ -24,6 +24,37 @@ export const createWakuDecoder = async () => {
   return decoder;
 };
 
+export const createWakuEncoder = async () => {
+  const encoder = createEncoder({
+    contentTopic: contentTopic, // message content topic
+    ephemeral: true, // allows messages to be persisted or not
+  });
+  return encoder;
+};
+
+export const sendMessage = async (node: any, encoder: any, message: any) => {
+  // Create a message structure using Protobuf
+  const ChatMessage = new protobuf.Type("ChatMessage")
+    .add(new protobuf.Field("timestamp", 1, "uint64"))
+    .add(new protobuf.Field("sender", 2, "string"))
+    .add(new protobuf.Field("message", 3, "string"));
+
+  // Create a new message object
+  const protoMessage = ChatMessage.create({
+    timestamp: Date.now(),
+    sender: "DeDe",
+    message: message,
+  });
+
+  // Serialise the message using Protobuf
+  const serialisedMessage = ChatMessage.encode(protoMessage).finish();
+
+  // Send the message using Light Push
+  return await node.lightPush.send(encoder, {
+    payload: serialisedMessage,
+  });
+};
+
 export const listenToMessages = async (
   node: any,
   decoder: any,

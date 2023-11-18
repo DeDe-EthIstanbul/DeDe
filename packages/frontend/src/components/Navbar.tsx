@@ -76,9 +76,15 @@ export default function Navbar({}: INavbar) {
   const contractAddress = getDeDeContractAddress(chainId);
   const { contract } = useContract(contractAddress, DeDeABI);
   const [ens, setEns] = useState("dedelivery-man.eth");
-  const [node, setNode] = useState<any>();
-  const [decoder, setDecoder] = useState<any>();
-  const { messages: newMessages } = useFilterMessages({
+  // const [node, setNode] = useState<any>();
+  // const [decoder, setDecoder] = useState<any>();
+  const { node } = useWaku<LightNode>();
+  const { decoder } = useContentPair();
+  const {
+    messages: newMessages,
+    isLoading: filterLoading,
+    error: filterError,
+  } = useFilterMessages({
     node,
     decoder,
   });
@@ -99,15 +105,38 @@ export default function Navbar({}: INavbar) {
     const setup = async () => {
       // Create the subscription
       const node = await setupWaku();
-      setNode(node);
+      // setNode(node);
       const decoder = await createWakuDecoder();
-      setDecoder(decoder);
+      // setDecoder(decoder);
+
+      const ChatMessage = new protobuf.Type("ChatMessage")
+        .add(new protobuf.Field("timestamp", 1, "uint64"))
+        .add(new protobuf.Field("sender", 2, "string"))
+        .add(new protobuf.Field("message", 3, "string"));
+
+      // Create the callback function
+      const callback = (wakuMessage: any) => {
+        // Check if there is a payload on the message
+        if (!wakuMessage.payload) return;
+        // Render the messageObj as desired in your application
+        const messageObj = ChatMessage.decode(wakuMessage.payload);
+        // console.log(wakuMessage);
+        // console.log(messageObj);
+        toast.success(messageObj.toJSON().message);
+      };
+      // Listen to messages
+      await listenToMessages(node, decoder, callback);
     };
 
     setup();
   }, []);
 
   useEffect(() => {
+    console.log({ filterLoading });
+  }, [filterLoading]);
+
+  useEffect(() => {
+    console.log(newMessages);
     if (newMessages.length > 0) {
       const ChatMessage = new protobuf.Type("ChatMessage")
         .add(new protobuf.Field("timestamp", 1, "uint64"))
@@ -120,7 +149,7 @@ export default function Navbar({}: INavbar) {
         toast.success(messageObj.toJSON().message);
       }
     }
-  }, [newMessages, storedMessages]);
+  }, [newMessages]);
 
   useEffect(() => {
     const provider = new providers.InfuraProvider(

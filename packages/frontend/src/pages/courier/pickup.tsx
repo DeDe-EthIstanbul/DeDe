@@ -102,11 +102,14 @@ export default function CourierPickup() {
     }
   };
 
-  const confirmPickup = () => {
+  const confirmPickup = async () => {
     // Send the signature to the smart contract
     console.log(res);
-    toast.success("Pickup confirmed!");
-    setSuccess(true);
+    toast.success("Pickup confirming!");
+    fetch("/api/pickup")
+      .then(() => setSuccess(true))
+      .finally(() => setLoading(false));
+    setLoading(true);
   };
 
   return (
