@@ -212,6 +212,12 @@ module.exports = {
       accounts: ACCOUNT,
       saveDeployments: true,
     },
+    linea_testnet: {
+      url: 'https://rpc.goerli.linea.build',
+      chainId: 59140,
+      accounts: ACCOUNT,
+      saveDeployments: true,
+    },
   },
   solidity: {
     compilers: [
