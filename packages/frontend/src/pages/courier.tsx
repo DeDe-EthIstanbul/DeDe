@@ -50,7 +50,7 @@ const mockData = [
   },
 ];
 
-export default function Home() {
+export default function CourierHome() {
   const [type, setType] = useState<"user" | "courier" | undefined>();
   const address = useAddress();
   const router = useRouter();
