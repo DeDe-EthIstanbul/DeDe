@@ -5,6 +5,50 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Avatar } from "@ensdomains/thorin";
 import LocationIcon from "@/icons/location";
+import JobDetails from "@/components/JobDetails";
+
+const mockData = [
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+  {
+    pickUp: "New York, 45700",
+    dropOff: "New York, 45700",
+    revenue: "Ξ 0.024",
+    userRating: "4.2",
+    dedeScore: 250,
+    distance: 87,
+  },
+];
 
 export default function Home() {
   const [type, setType] = useState<"user" | "courier" | undefined>();
@@ -32,31 +76,19 @@ export default function Home() {
       </nav>
       <h1 className="font-bold text-xl font-sans mt-4">Available Jobs</h1>
       <div className="flex flex-col py-4 gap-y-4">
-        <div className="flex flex-col relative">
-          <div className="flex flex-col w-full bg-brand-text rounded-lg px-4 py-3 gap-y-3 z-10 border-brand-primary border">
-            <div className="flex flex-row w-full items-center justify-between">
-              <p className="font-bold font-sans">Parcel Delivery</p>
-              <p className="font-bold font-sans text-brand-success">$420.69</p>
-            </div>
-            <div className="flex flex-row w-full items-center">
-              <div className="flex flex-col basis-1/2">
-                <div className="flex flex-row items-center">
-                  <LocationIcon className="h-4 mr-2 fill-brand-primary" />
-                  <p className="font-sans text-sm">Pick Up</p>
-                </div>
-                <p className="font-bold font-sans text-sm">New York, 45700</p>
-              </div>
-              <div className="flex flex-col basis-1/2">
-                <div className="flex flex-row items-center">
-                  <LocationIcon className="h-4 mr-2 fill-brand-primary" />
-                  <p className="font-sans text-sm">Drop Off</p>
-                </div>
-                <p className="font-bold font-sans text-sm">New York, 45700</p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1"></div>
-        </div>
+        {mockData.map((data, index) => {
+          return (
+            <JobDetails
+              key={index}
+              pickUp={data.pickUp}
+              dropOff={data.dropOff}
+              revenue={data.revenue}
+              userRating={data.userRating}
+              dedeScore={data.dedeScore}
+              distance={data.distance}
+            />
+          );
+        })}
       </div>
     </main>
   );
