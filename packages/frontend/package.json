@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@arx-research/libhalo": "^1.2.19",
     "@ensdomains/thorin": "^0.6.44",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
@@ -20,6 +21,7 @@
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "react-transition-state": "1.1.5",
     "styled-components": "^6.1.1"
   },
