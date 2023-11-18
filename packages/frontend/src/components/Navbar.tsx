@@ -30,6 +30,10 @@ interface INavbar {}
 
 const mockData = [
   {
+    name: "Connect ENS",
+    points: 50,
+  },
+  {
     name: "Successful Delivery",
     points: 10,
   },
@@ -153,8 +157,11 @@ export default function Navbar({}: INavbar) {
           </div>
           <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
         </div>
-        <div className="flex flex-row py-4 border-t border-brand-primary mt-8">
+        <div className="flex flex-row flex-wrap gap-2 py-4 border-t border-brand-primary mt-8">
           {/* If address is not undefined, display IDKitWidget */}
+          <p className="font-bold font-sans">
+            Verify/Connect your accounts to increase your DeDe score
+          </p>
           {address &&
             process.env.NEXT_PUBLIC_WLD_CLIENT_ID &&
             process.env.NEXT_PUBLIC_WLD_ACTION && (
@@ -173,7 +180,21 @@ export default function Navbar({}: INavbar) {
                       open();
                     }}
                   >
-                    Verify with World ID
+                    <Button
+                      prefix={
+                        <img
+                          src="/assets/worldcoin-avatar.png"
+                          alt="Worldcoin"
+                        />
+                      }
+                      style={{
+                        backgroundColor: "#ffffff",
+                        borderColor: "#E5E5E5",
+                        color: "#363B44",
+                      }}
+                    >
+                      Verify with World ID
+                    </Button>
                   </button>
                 )}
               </IDKitWidget>
