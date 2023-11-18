@@ -145,8 +145,8 @@ module.exports = {
       saveDeployments: true,
     },
     arbitrum_testnet: {
-      url: 'https://goerli-rollup.arbitrum.io/rpc',
-      chainId: 421613,
+      url: 'https://sepolia-rollup.arbitrum.io/rpc',
+      chainId: 421614,
       accounts: ACCOUNT,
       saveDeployments: true,
     },
@@ -206,7 +206,7 @@ module.exports = {
       saveDeployments: true,
     },
     sepolia: {
-      url: process.env.ALCHEMY_PROVIDER_SEPOLIA,
+      url: process.env.ALCHEMY_PROVIDER_SEPOLIA || '',
       chainId: 11155111,
       accounts: ACCOUNT,
       saveDeployments: true,
@@ -284,7 +284,7 @@ module.exports = {
       sepolia: 'HRPUPRN4G9HKSBWFCCRW7I61C7HJPNKVGD',
       polygonMumbai: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
       base_testnet: 'BEH7Y1KKMYDKNV4416SEV3EQ1PT9AWC4Y8',
-      arbitrum_testnet: 'STF7WZSAWCWMECBKQAXMKA79XI8EMFE8CF'
+      arbitrum_testnet: 'STF7WZSAWCWMECBKQAXMKA79XI8EMFE8CF',
     },
     customChains: [
       {
@@ -334,7 +334,7 @@ module.exports = {
           apiURL: 'https://api-goerli.basescan.org/api',
           browserURL: 'https://goerli.basescan.org/',
         },
-      }
+      },
     ],
   },
   subgraph: {
