@@ -116,7 +116,7 @@ module.exports = {
       accounts: ACCOUNT,
     },
     mumbai: {
-      url: 'https://matic-mumbai.chainstacklabs.com',
+      url: 'https://rpc.ankr.com/polygon_mumbai',
       chainId: 80001,
       accounts: ACCOUNT,
       saveDeployments: true,

@@ -7,9 +7,10 @@ pragma solidity ^0.8.9;
 import { SchemaResolver } from "@ethereum-attestation-service/eas-contracts/contracts/resolver/SchemaResolver.sol";
 import { IEAS, Attestation, AttestationRequest, AttestationRequestData } from "@ethereum-attestation-service/eas-contracts/contracts/IEAS.sol";
 import { NO_EXPIRATION_TIME, EMPTY_UID } from "@ethereum-attestation-service/eas-contracts/contracts/Common.sol";
-import { WorldIDEnabled } from "./WorldIDEnabled.sol";
+import { WorldIDEnabled, IWorldID } from "./WorldIDEnabled.sol";
+import { ByteHasher } from "./helpers/ByteHasher.sol";
 
-contract DeDe is WorldIDEnabled {
+contract DeDe is WorldIDEnabled, SchemaResolver {
     using ByteHasher for bytes;
 
     IEAS eas;
@@ -85,7 +86,11 @@ contract DeDe is WorldIDEnabled {
      * @param _settlementDuration How long the courier has to complete the shipment
      * @param _eas Address of the EAS contract
      */
-    constructor(uint _settlementDuration, IEAS _eas) payable SchemaResolver(_eas) {
+    constructor(
+        uint _settlementDuration,
+        IEAS _eas,
+        IWorldID _worldId
+    ) payable SchemaResolver(_eas) WorldIDEnabled(_worldId) {
         settlementDuration = _settlementDuration;
         eas = _eas;
     }
