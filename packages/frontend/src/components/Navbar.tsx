@@ -13,9 +13,7 @@ import { useEffect, useState } from "react";
 import { Avatar, EnsSVG, Button } from "@ensdomains/thorin";
 import { BigNumber } from "ethers";
 import DeDeABI from "../utils/DeDeABI.json";
-import { Dialog } from "@headlessui/react";
-import Link from "next/link";
-import Modal from "./Modal";
+// import { ENS } from "@ensdomains/ensjs";
 import PowerModal from "./PowerModal";
 import { defaultAbiCoder as abi } from "ethers/lib/utils";
 import { getChainByChainId } from "@thirdweb-dev/chains";
@@ -30,7 +28,7 @@ interface INavbar {}
 
 const mockData = [
   {
-    name: "Connect ENS",
+    name: "Own an ENS",
     points: 50,
   },
   {
@@ -187,6 +185,7 @@ export default function Navbar({}: INavbar) {
                           alt="Worldcoin"
                         />
                       }
+                      variant="primary"
                       style={{
                         backgroundColor: "#ffffff",
                         borderColor: "#E5E5E5",

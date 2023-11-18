@@ -1,17 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
-
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
 export default function Home() {
   const [type, setType] = useState<"user" | "courier" | undefined>();
   const address = useAddress();
+  const { address: wcAccount, isConnecting, isDisconnected } = useAccount();
   const router = useRouter();
+  const { open } = useWeb3Modal();
 
   useEffect(() => {
-    if (address) {
+    if (address || wcAccount) {
       router.push(`/courier`);
     }
   }, [type, address, router]);
@@ -55,7 +58,7 @@ export default function Home() {
               },
               fontFamily: "Poppins, sans-serif",
             })}
-            btnTitle={"Sign In As User"}
+            btnTitle={"Sign In With Email"}
             modalTitle={"Sign In To DeDe"}
             switchToActiveChain={true}
             modalSize={"compact"}
@@ -63,6 +66,12 @@ export default function Home() {
             className="font-bold py-3 w-full font-sans"
           />
         </div>
+        <button
+          onClick={() => open()}
+          className="font-bold w-full rounded-lg py-3 text-brand-primary font-sans"
+        >
+          Sign In With WalletConnect
+        </button>
       </div>
     </main>
   );
