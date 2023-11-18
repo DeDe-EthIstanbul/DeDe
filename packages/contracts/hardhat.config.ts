@@ -116,10 +116,15 @@ module.exports = {
       accounts: ACCOUNT,
     },
     mumbai: {
-      url: 'https://rpc.ankr.com/polygon_mumbai',
+      url: 'https://polygon-mumbai.g.alchemy.com/v2/8QaknMeBnwogGar3EwmrGzcW_KPTq73A',
       chainId: 80001,
       accounts: ACCOUNT,
       saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiKey: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
+        },
+      },
     },
     optimism_mainnet: {
       url: 'https://mainnet.optimism.io',
@@ -157,8 +162,8 @@ module.exports = {
       gasLimit: 1000000000000,
     },
     scroll_testnet: {
-      url: 'https://alpha-rpc.scroll.io/l2',
-      chainId: 534353,
+      url: 'https://sepolia-rpc.scroll.io/',
+      chainId: 534351,
       accounts: ACCOUNT,
       saveDeployments: true,
     },
@@ -218,6 +223,12 @@ module.exports = {
       accounts: ACCOUNT,
       saveDeployments: true,
     },
+    celo_testnet: {
+      url: 'https://alfajores-forno.celo-testnet.org',
+      chainId: 44787,
+      accounts: ACCOUNT,
+      saveDeployments: true,
+    },
   },
   solidity: {
     compilers: [
@@ -266,6 +277,14 @@ module.exports = {
   etherscan: {
     apiKey: {
       taiko_testnet: '42069',
+      scroll_testnet: '42069',
+      mantle_testnet: '42069',
+      linea_testnet: '42069',
+      celo_testnet: '8NH96QIJ4ZVR6SN7Z89EVA6JIE1JHY16NS',
+      sepolia: 'HRPUPRN4G9HKSBWFCCRW7I61C7HJPNKVGD',
+      polygonMumbai: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
+      base_testnet: 'BEH7Y1KKMYDKNV4416SEV3EQ1PT9AWC4Y8',
+      arbitrum_testnet: 'STF7WZSAWCWMECBKQAXMKA79XI8EMFE8CF'
     },
     customChains: [
       {
@@ -276,6 +295,46 @@ module.exports = {
           browserURL: 'https://explorer.test.taiko.xyz',
         },
       },
+      {
+        network: 'scroll_testnet',
+        chainId: 534351,
+        urls: {
+          apiURL: 'https://sepolia-blockscout.scroll.io/api',
+          browserURL: 'https://sepolia-blockscout.scroll.io',
+        },
+      },
+      {
+        network: 'linea_testnet',
+        chainId: 59140,
+        urls: {
+          apiURL: 'https://explorer.goerli.linea.build/api',
+          browserURL: 'https://explorer.goerli.linea.build',
+        },
+      },
+      {
+        network: 'celo_testnet',
+        chainId: 44787,
+        urls: {
+          apiURL: 'https://explorer.celo.org/alfajores/api',
+          browserURL: 'https://explorer.celo.org/alfajores',
+        },
+      },
+      {
+        network: 'mantle_testnet',
+        chainId: 5001,
+        urls: {
+          apiURL: 'https://explorer.testnet.mantle.xyz/api',
+          browserURL: 'https://explorer.testnet.mantle.xyz',
+        },
+      },
+      {
+        network: 'base_testnet',
+        chainId: 84531,
+        urls: {
+          apiURL: 'https://api-goerli.basescan.org/api',
+          browserURL: 'https://goerli.basescan.org/',
+        },
+      }
     ],
   },
   subgraph: {
