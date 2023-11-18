@@ -10,6 +10,7 @@
     "deploy:mumbai": "pnpm -F contracts deploy:mumbai",
     "web": "pnpm -F frontend wagmi && pnpm -F frontend dev",
     "backend": "pnpm -F backend start",
-    "new-wallet": "pnpm -F contracts wallet"
+    "new-wallet": "pnpm -F contracts wallet",
+    "deploy-your-mom": "pnpm -F contracts deploy:scroll_testnet && pnpm -F contracts deploy:base_testnet && pnpm -F contracts deploy:mumbai && pnpm -F contracts deploy:celo_testnet && pnpm -F contracts deploy:mantle_testnet && pnpm -F contracts deploy:linea_testnet"
   }
 }

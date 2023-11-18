@@ -1,8 +1,10 @@
 import 'dotenv/config';
 
 import { ethers } from 'hardhat';
+import hre from 'hardhat'
+import { task } from 'hardhat/config';
 
-module.exports = async ({ getNamedAccounts, deployments, getChainId }: any) => {
+module.exports = async ({ getNamedAccounts, deployments, getChainId, task }: any) => {
   const { deploy, read, execute } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
@@ -60,6 +62,13 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }: any) => {
     log: true,
     args: [0, EAS_ADDRESS, WORLD_ID_ADDRESS], //TODO: set correct values
   });
+
+  // Verify the contract using hardhat verify task
+  await hre.run("verify:verify", {
+    address: contract.address,
+    constructorArguments: [0, EAS_ADDRESS, WORLD_ID_ADDRESS],
+  });
+
 };
 
 module.exports.tags = ['DeDe'];
