@@ -30,11 +30,27 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
         COMPLETED
     }
 
-    bytes32 REQUESTED_SCHEMA; //TODO
-    bytes32 PICKED_UP_SCHEMA; //TODO
-    bytes32 DELIVERED_SCHEMA; //TODO
-    bytes32 DISPUTED_SCHEMA; //TODO
-    bytes32 COMPLETED_SCHEMA; //TODO
+    bytes32 REQUESTED_SCHEMA = 0x649c99bb183684413dba0659c79fe734e35e8fe8c53f48674ff7f39aa1226d66; //TODO
+    bytes32 public PICKED_UP_SCHEMA; //TODO
+    bytes32 public DELIVERED_SCHEMA; //TODO
+    bytes32 public DISPUTED_SCHEMA; //TODO
+    bytes32 public COMPLETED_SCHEMA; //TODO
+
+    function setPickedUpSchema(bytes32 _schema) public {
+        PICKED_UP_SCHEMA = _schema;
+    }
+
+    function setDeliveredSchema(bytes32 _schema) public {
+        DELIVERED_SCHEMA = _schema;
+    }
+
+    function setDisputedSchema(bytes32 _schema) public {
+        DISPUTED_SCHEMA = _schema;
+    }
+
+    function setCompletedSchema(bytes32 _schema) public {
+        COMPLETED_SCHEMA = _schema;
+    }
 
     struct Shipment {
         uint id;
@@ -120,7 +136,7 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
      * @dev Request a shipment. Direct Contract Attestation
      * @param receiver receiver of the shipment
      */
-    function requestShipment(address receiver) public payable {
+    function requestShipment(address receiver) public payable returns (bytes32) {
         // require(msg.value >= request.bounty, "Shipment cost insufficient");
         // uint stakeAmount = request.packageValue / 2;
 
@@ -157,6 +173,7 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
                 })
             })
         );
+        return uid;
     }
 
     /**
