@@ -6,7 +6,7 @@ import { WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygonMumbai, sepolia } from "viem/chains";
 
 // 1. Get projectId
-const projectId = "a39226a48d1539c7c06eea748dd1d861";
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_ID || "";
 
 // 2. Create wagmiConfig
 const metadata = {

@@ -22,6 +22,7 @@
     "@waku/interfaces": "^0.0.20",
     "@waku/react": "0.0.5-63a782d",
     "@waku/sdk": "^0.0.21",
+    "@walletconnect/notify-client": "^0.14.4",
     "@web3modal/wagmi": "^3.3.2",
     "@worldcoin/idkit": "^0.5.1",
     "clsx": "^2.0.0",
