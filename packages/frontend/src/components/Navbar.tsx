@@ -1,11 +1,29 @@
+import { IDKitWidget, ISuccessResult, solidityEncode } from "@worldcoin/idkit"; // add import for solidityEncode
+import {
+  getChainId,
+  useAddress,
+  useChain,
+  useChainId,
+  useContract,
+  useContractWrite,
+} from "@thirdweb-dev/react";
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 
 import { Avatar } from "@ensdomains/thorin";
+import { BigNumber } from "ethers";
+import DeDeABI from "../utils/DeDeABI.json";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import Modal from "./Modal";
 import PowerModal from "./PowerModal";
+import { defaultAbiCoder as abi } from "ethers/lib/utils";
+import { getChainByChainId } from "@thirdweb-dev/chains";
+import { getDeDeContractAddress } from "@/utils/addresses";
+
+export const decode = (type: string, encodedString: string) => {
+  return abi.decode([type], encodedString)[0];
+};
 
 interface INavbar {}
 
@@ -38,6 +56,59 @@ const mockData = [
 
 export default function Navbar({}: INavbar) {
   const [isOpen, setIsOpen] = useState(false);
+  const [proof, setProof] = useState<ISuccessResult | null>(null);
+  const address = useAddress(); // get the user's wallet address
+  console.log("🚀 | Navbar | address:", address);
+  const chainId = useChainId();
+  const contractAddress = getDeDeContractAddress(chainId);
+  const { contract } = useContract(contractAddress, DeDeABI);
+
+  const { mutateAsync, isLoading, error } = useContractWrite(
+    contract,
+    "verifyWithWorldCoin"
+  );
+
+  function onSuccess(result: ISuccessResult) {
+    setProof(result);
+    console.log(result);
+    console.log(proof);
+
+    if (!proof) {
+      console.log("smth wrong");
+      return;
+    }
+
+    mutateAsync({
+      args: [
+        address!,
+        proof?.merkle_root
+          ? decode("uint256", proof?.merkle_root ?? "")
+          : BigNumber.from(0),
+        proof?.nullifier_hash
+          ? decode("uint256", proof?.nullifier_hash ?? "")
+          : BigNumber.from(0),
+        proof?.proof
+          ? decode("uint256[8]", proof?.proof ?? "")
+          : [
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+              BigNumber.from(0),
+            ],
+      ],
+    });
+  }
+
+  console.log(
+    address,
+    process.env.NEXT_PUBLIC_WLD_CLIENT_ID,
+    process.env.NEXT_PUBLIC_WLD_ACTION
+  );
+
   return (
     <nav className="flex flex-row items-center justify-between w-full px-6 py-5">
       <img
@@ -64,11 +135,30 @@ export default function Navbar({}: INavbar) {
           <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
         </div>
         <div className="flex flex-row py-4">
-          <Link href="/profile">CLICK</Link>
-          <div className="flex w-full items-center justify-center">
-            Sign in with Worldcoin
-          </div>
-          Insert Buttons Here
+          {/* If address is not undefined, display IDKitWidget */}
+          {address &&
+            process.env.NEXT_PUBLIC_WLD_CLIENT_ID &&
+            process.env.NEXT_PUBLIC_WLD_ACTION && (
+              <IDKitWidget
+                app_id={process.env.NEXT_PUBLIC_WLD_CLIENT_ID} // must be an app set to on-chain
+                action={process.env.NEXT_PUBLIC_WLD_ACTION} // must be an action set to on-chain
+                signal={address} // prevents tampering with a message
+                onSuccess={onSuccess}
+                // no use for handleVerify, so it is removed
+                // leave credential_types unspecified (orb-only by default), as phone credentials are not supported on-chain
+                enableTelemetry
+              >
+                {({ open }) => (
+                  <button
+                    onClick={() => {
+                      open();
+                    }}
+                  >
+                    Verify with World ID
+                  </button>
+                )}
+              </IDKitWidget>
+            )}
         </div>
         <div className="flex flex-col border-t border-brand-primary py-2">
           {mockData.map((data, index) => {
