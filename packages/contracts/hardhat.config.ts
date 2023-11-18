@@ -82,10 +82,10 @@ module.exports = {
     },
     hardhat: {
       // TODO: Add snapshot block
-      // forking: {
-      //   url: process.env.ALCHEMY_PROVIDER_MAINNET,
-      //   block: 0,
-      // },
+      forking: {
+        url: process.env.ALCHEMY_PROVIDER_SEPOLIA,
+        block: 4714714,
+      },
       blockGasLimit: 10000000000,
       mining: {
         auto: true,
@@ -201,7 +201,7 @@ module.exports = {
       saveDeployments: true,
     },
     sepolia: {
-      url: 'https://rpc.sepolia.org',
+      url: process.env.ALCHEMY_PROVIDER_SEPOLIA,
       chainId: 11155111,
       accounts: ACCOUNT,
       saveDeployments: true,
