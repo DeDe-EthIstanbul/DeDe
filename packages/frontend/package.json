@@ -20,6 +20,7 @@
     "@thirdweb-dev/sdk": "^4.0.14",
     "@waku/react": "0.0.5-63a782d",
     "@waku/sdk": "^0.0.21",
+    "@web3modal/wagmi": "^3.3.2",
     "@worldcoin/idkit": "^0.5.1",
     "clsx": "^2.0.0",
     "ethers": "^5.7.2",
@@ -31,7 +32,8 @@
     "react-lottie": "^1.2.3",
     "react-transition-state": "1.1.5",
     "styled-components": "^6.1.1",
-    "viem": "^1.19.3"
+    "viem": "^1.19.3",
+    "wagmi": "^1.4.7"
   },
   "devDependencies": {
     "@types/node": "^20",

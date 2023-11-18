@@ -28,6 +28,12 @@ import type { AppProps } from "next/app";
 import ChainContext from "@/context/Chain";
 import { ThemeProvider } from "styled-components";
 import { useState } from "react";
+import { Web3Modal } from "../context/Web3Modal";
+
+export const metadata = {
+  title: "Web3Modal",
+  description: "Web3Modal Example",
+};
 
 const theme = {
   ...lightTheme,
@@ -84,7 +90,9 @@ export default function App({ Component, pageProps }: AppProps) {
     >
       <ThemeProvider theme={theme}>
         <ThorinGlobalStyles />
-        <Component {...pageProps} />
+        <Web3Modal>
+          <Component {...pageProps} />
+        </Web3Modal>
       </ThemeProvider>
       <Toaster />
     </ThirdwebProvider>
