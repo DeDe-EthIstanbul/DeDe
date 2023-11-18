@@ -6,11 +6,11 @@ import {
   useChainId,
   useContract,
   useContractWrite,
+  useENS,
 } from "@thirdweb-dev/react";
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
-
-import { Avatar } from "@ensdomains/thorin";
+import { Avatar, EnsSVG, Button } from "@ensdomains/thorin";
 import { BigNumber } from "ethers";
 import DeDeABI from "../utils/DeDeABI.json";
 import { Dialog } from "@headlessui/react";
@@ -20,6 +20,7 @@ import PowerModal from "./PowerModal";
 import { defaultAbiCoder as abi } from "ethers/lib/utils";
 import { getChainByChainId } from "@thirdweb-dev/chains";
 import { getDeDeContractAddress } from "@/utils/addresses";
+import { providers } from "ethers";
 
 export const decode = (type: string, encodedString: string) => {
   return abi.decode([type], encodedString)[0];
@@ -62,6 +63,22 @@ export default function Navbar({}: INavbar) {
   const chainId = useChainId();
   const contractAddress = getDeDeContractAddress(chainId);
   const { contract } = useContract(contractAddress, DeDeABI);
+  const [ens, setEns] = useState("dedelivery-man.eth");
+
+  useEffect(() => {
+    const provider = new providers.InfuraProvider(
+      "sepolia",
+      process.env.NEXT_PUBLIC_INFURA_KEY
+    );
+    provider
+      .lookupAddress(address || "0xAD3e93F6E6eb04608119B8dB8067c2a9Ff536b06")
+      .then((res) => {
+        console.log({ res });
+      })
+      .catch((err: any) => {
+        console.log({ err });
+      });
+  }, []);
 
   const { mutateAsync, isLoading, error } = useContractWrite(
     contract,
@@ -116,8 +133,10 @@ export default function Navbar({}: INavbar) {
         alt="DeDe"
         className="w-20 h-auto"
       />
-      <div className="w-12 h-12" onClick={() => setIsOpen(true)}>
-        <Avatar label="User Profile" src={"/assets/profile.png"} />
+      <div className="flex flex-row gap-x-2">
+        <div className="w-12 h-12" onClick={() => setIsOpen(true)}>
+          <Avatar label="User Profile" src={"/assets/profile.png"} />
+        </div>
       </div>
       <PowerModal isOpen={isOpen} setIsOpen={setIsOpen}>
         <p className="font-bold text-xl font-sans text-brand-primary mb-3">
@@ -134,7 +153,7 @@ export default function Navbar({}: INavbar) {
           </div>
           <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
         </div>
-        <div className="flex flex-row py-4">
+        <div className="flex flex-row py-4 border-t border-brand-primary mt-8">
           {/* If address is not undefined, display IDKitWidget */}
           {address &&
             process.env.NEXT_PUBLIC_WLD_CLIENT_ID &&
@@ -148,7 +167,7 @@ export default function Navbar({}: INavbar) {
                 // leave credential_types unspecified (orb-only by default), as phone credentials are not supported on-chain
                 enableTelemetry
               >
-                {({ open }) => (
+                {({ open }: any) => (
                   <button
                     onClick={() => {
                       open();
@@ -159,6 +178,19 @@ export default function Navbar({}: INavbar) {
                 )}
               </IDKitWidget>
             )}
+
+          <div style={{ width: "180px" }}>
+            <Button
+              prefix={<EnsSVG />}
+              variant="primary"
+              style={{
+                backgroundColor: "#023039",
+                color: "#FEFEF2",
+              }}
+            >
+              {ens}
+            </Button>
+          </div>
         </div>
         <div className="flex flex-col border-t border-brand-primary py-2">
           {mockData.map((data, index) => {
