@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 import { Avatar } from "@ensdomains/thorin";
+import Image from "next/image";
 import LocationIcon from "@/icons/location";
-import { Spinner } from "@ensdomains/thorin";
 import Modal from "@/components/Modal";
 import Navbar from "@/components/Navbar";
+import { Spinner } from "@ensdomains/thorin";
+import { useRouter } from "next/router";
 
 const mockData = [
   {
@@ -85,8 +86,8 @@ export default function UserHome() {
           className="w-full h-auto absolute top-0 left-0"
         />
         <div className="relative flex flex-col">
-          <div className="absolute flex flex-col w-[90%] left-1/2 transform -translate-x-1/2 z-20">
-            <div className="flex flex-col rounded-lg bg-brand-text border border-brand-primary p-4 z-20">
+          <div className="absolute flex flex-col w-[90%] left-1/2 transform -translate-x-1/2 z-1">
+            <div className="flex flex-col rounded-lg bg-brand-text border border-brand-primary p-4 z-10">
               <div className="flex flex-row items-center">
                 <LocationIcon className="h-4 fill-brand-primary" />
                 <input
@@ -107,7 +108,7 @@ export default function UserHome() {
                 />
               </div>
             </div>
-            <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
+            <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-4"></div>
           </div>
         </div>
       </div>
