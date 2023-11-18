@@ -8,6 +8,7 @@ import {
   useContractWrite,
   useENS,
 } from "@thirdweb-dev/react";
+import protobuf from "protobufjs";
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { Avatar, EnsSVG, Button } from "@ensdomains/thorin";
@@ -19,6 +20,15 @@ import { defaultAbiCoder as abi } from "ethers/lib/utils";
 import { getChainByChainId } from "@thirdweb-dev/chains";
 import { getDeDeContractAddress } from "@/utils/addresses";
 import { providers } from "ethers";
+import { createWakuDecoder, listenToMessages, setupWaku } from "@/utils/waku";
+import { PageDirection, LightNode } from "@waku/interfaces";
+import {
+  useWaku,
+  useContentPair,
+  useFilterMessages,
+  useStoreMessages,
+} from "@waku/react";
+import toast from "react-hot-toast";
 
 export const decode = (type: string, encodedString: string) => {
   return abi.decode([type], encodedString)[0];
@@ -66,6 +76,51 @@ export default function Navbar({}: INavbar) {
   const contractAddress = getDeDeContractAddress(chainId);
   const { contract } = useContract(contractAddress, DeDeABI);
   const [ens, setEns] = useState("dedelivery-man.eth");
+  const [node, setNode] = useState<any>();
+  const [decoder, setDecoder] = useState<any>();
+  const { messages: newMessages } = useFilterMessages({
+    node,
+    decoder,
+  });
+  const { messages: storedMessages } = useStoreMessages({
+    node,
+    decoder,
+    options: {
+      pageSize: 5,
+      pageDirection: PageDirection.FORWARD,
+      timeFilter: {
+        startTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+        endTime: new Date(),
+      },
+    },
+  });
+
+  useEffect(() => {
+    const setup = async () => {
+      // Create the subscription
+      const node = await setupWaku();
+      setNode(node);
+      const decoder = await createWakuDecoder();
+      setDecoder(decoder);
+    };
+
+    setup();
+  }, []);
+
+  useEffect(() => {
+    if (newMessages.length > 0) {
+      const ChatMessage = new protobuf.Type("ChatMessage")
+        .add(new protobuf.Field("timestamp", 1, "uint64"))
+        .add(new protobuf.Field("sender", 2, "string"))
+        .add(new protobuf.Field("message", 3, "string"));
+
+      const message = newMessages.pop();
+      if (message) {
+        const messageObj = ChatMessage.decode(message.payload);
+        toast.success(messageObj.toJSON().message);
+      }
+    }
+  }, [newMessages, storedMessages]);
 
   useEffect(() => {
     const provider = new providers.InfuraProvider(
@@ -199,7 +254,7 @@ export default function Navbar({}: INavbar) {
               </IDKitWidget>
             )}
 
-          <div style={{ width: "180px" }}>
+          <div>
             <Button
               prefix={<EnsSVG />}
               variant="primary"

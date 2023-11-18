@@ -4,7 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Lottie from "react-lottie";
-import Navbar from "@/components/Navbar";
+import dynamic from "next/dynamic";
+
+const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";

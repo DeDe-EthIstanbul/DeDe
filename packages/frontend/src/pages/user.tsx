@@ -6,7 +6,9 @@ import { Avatar } from "@ensdomains/thorin";
 import Image from "next/image";
 import LocationIcon from "@/icons/location";
 import Modal from "@/components/Modal";
-import Navbar from "@/components/Navbar";
+import dynamic from "next/dynamic";
+
+const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 import { Spinner } from "@ensdomains/thorin";
 import { useRouter } from "next/router";
 

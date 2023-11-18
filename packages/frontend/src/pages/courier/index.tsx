@@ -6,7 +6,10 @@ import { useEffect, useState } from "react";
 import { Avatar } from "@ensdomains/thorin";
 import LocationIcon from "@/icons/location";
 import JobDetails from "@/components/JobDetails";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
+import dynamic from "next/dynamic";
+
+const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
 const mockData = [
   {

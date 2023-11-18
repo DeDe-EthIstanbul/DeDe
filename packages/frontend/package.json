@@ -18,6 +18,7 @@
     "@thirdweb-dev/chains": "^0.1.58",
     "@thirdweb-dev/react": "^4.1.7",
     "@thirdweb-dev/sdk": "^4.0.14",
+    "@waku/interfaces": "^0.0.20",
     "@waku/react": "0.0.5-63a782d",
     "@waku/sdk": "^0.0.21",
     "@web3modal/wagmi": "^3.3.2",
