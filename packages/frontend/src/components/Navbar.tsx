@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
-import { Dialog } from "@headlessui/react";
+
 import { Avatar } from "@ensdomains/thorin";
+import { Dialog } from "@headlessui/react";
+import Link from "next/link";
 import Modal from "./Modal";
 import PowerModal from "./PowerModal";
 
@@ -62,6 +64,7 @@ export default function Navbar({}: INavbar) {
           <div className="w-full h-full bg-brand-secondary absolute rounded-lg top-1 left-1 z-10"></div>
         </div>
         <div className="flex flex-row py-4">
+          <Link href="/profile">CLICK</Link>
           <div className="flex w-full items-center justify-center">
             Sign in with Worldcoin
           </div>

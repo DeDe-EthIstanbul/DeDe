@@ -1,28 +1,31 @@
 import "@/styles/globals.css";
-import { ThemeProvider } from "styled-components";
-import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
-import type { AppProps } from "next/app";
+
 import {
-  ThirdwebProvider,
-  ConnectWallet,
-  embeddedWallet,
-  smartWallet,
-  safeWallet,
-} from "@thirdweb-dev/react";
-import {
-  OptimismGoerli,
-  TaikoJolnirL2,
-  MantleTestnet,
   ArbitrumSepolia,
-  PolygonZkevmTestnet,
-  LineaTestnet,
-  ScrollSepoliaTestnet,
-  GnosisChiadoTestnet,
-  CeloAlfajoresTestnet,
   BaseSepoliaTestnet,
+  CeloAlfajoresTestnet,
+  GnosisChiadoTestnet,
+  LineaTestnet,
+  MantleTestnet,
+  OptimismGoerli,
+  PolygonZkevmTestnet,
+  ScrollSepoliaTestnet,
+  TaikoJolnirL2,
 } from "@thirdweb-dev/chains";
-import { useState } from "react";
+import {
+  ConnectWallet,
+  ThirdwebProvider,
+  embeddedWallet,
+  safeWallet,
+  smartWallet,
+} from "@thirdweb-dev/react";
+import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
+
+import type { AppProps } from "next/app";
 import ChainContext from "@/context/Chain";
+import { ThemeProvider } from "styled-components";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { useState } from "react";
 
 const theme = {
   ...lightTheme,
@@ -42,45 +45,47 @@ export default function App({ Component, pageProps }: AppProps) {
   const [selectedChain, setSelectedChain] = useState<any>(ArbitrumSepolia);
 
   return (
-    <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
-      <ThirdwebProvider
-        supportedWallets={[
-          smartWallet(
-            embeddedWallet({
-              auth: {
-                options: ["email", "google"],
-              },
-            }),
-            config
-          ),
-          safeWallet({
-            personalWallets: [
+    <UserProvider>
+      <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
+        <ThirdwebProvider
+          supportedWallets={[
+            smartWallet(
               embeddedWallet({
                 auth: {
                   options: ["email", "google"],
                 },
               }),
-            ],
-          }),
-        ]}
-        clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
-        activeChain={selectedChain}
-        supportedChains={[
-          ArbitrumSepolia,
-          PolygonZkevmTestnet,
-          LineaTestnet,
-          ScrollSepoliaTestnet,
-          GnosisChiadoTestnet,
-          MantleTestnet,
-          CeloAlfajoresTestnet,
-          BaseSepoliaTestnet,
-        ]}
-      >
-        <ThemeProvider theme={theme}>
-          <ThorinGlobalStyles />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </ThirdwebProvider>
-    </ChainContext.Provider>
+              config
+            ),
+            safeWallet({
+              personalWallets: [
+                embeddedWallet({
+                  auth: {
+                    options: ["email", "google"],
+                  },
+                }),
+              ],
+            }),
+          ]}
+          clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
+          activeChain={selectedChain}
+          supportedChains={[
+            ArbitrumSepolia,
+            PolygonZkevmTestnet,
+            LineaTestnet,
+            ScrollSepoliaTestnet,
+            GnosisChiadoTestnet,
+            MantleTestnet,
+            CeloAlfajoresTestnet,
+            BaseSepoliaTestnet,
+          ]}
+        >
+          <ThemeProvider theme={theme}>
+            <ThorinGlobalStyles />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ThirdwebProvider>
+      </ChainContext.Provider>
+    </UserProvider>
   );
 }
