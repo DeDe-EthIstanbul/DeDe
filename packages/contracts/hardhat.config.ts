@@ -234,6 +234,11 @@ module.exports = {
       chainId: 1442,
       accounts: ACCOUNT,
       saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiKey: 'A5T3GR12B6PYJRGZUMUHAIFG656C9J85BG',
+        },
+      },
     },
   },
   solidity: {
@@ -292,7 +297,7 @@ module.exports = {
       polygonMumbai: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
       base_testnet: 'BEH7Y1KKMYDKNV4416SEV3EQ1PT9AWC4Y8',
       arbitrum_testnet: 'STF7WZSAWCWMECBKQAXMKA79XI8EMFE8CF',
-      polygon_zkvm_testnet: '5XUJHBNCVSF2J3F3W865U6ZYNTW2G7Z8WV',
+      polygon_zkvm_testnet: 'A5T3GR12B6PYJRGZUMUHAIFG656C9J85BG',
     },
     customChains: [
       {
