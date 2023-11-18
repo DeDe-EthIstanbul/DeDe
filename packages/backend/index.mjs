@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/pickup", async (req, res) => {
-  const data = sendMessage(node, encoder, "Your parcel has been received!");
+  const data = sendMessage(node, encoder, "Your parcel has been picked up!");
   console.log("Message sent");
   res.send(JSON.stringify(data, null, 4));
 });

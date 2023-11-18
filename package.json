@@ -9,6 +9,7 @@
     "deploy:sepolia": "pnpm -F contracts deploy:sepolia",
     "deploy:mumbai": "pnpm -F contracts deploy:mumbai",
     "web": "pnpm -F frontend wagmi && pnpm -F frontend dev",
+    "backend": "pnpm -F backend start",
     "new-wallet": "pnpm -F contracts wallet"
   }
 }
