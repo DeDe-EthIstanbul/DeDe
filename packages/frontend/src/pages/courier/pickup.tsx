@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import { ethers } from "ethers";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
@@ -48,47 +49,72 @@ export default function CourierPickup() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const signer = useSigner();
+  const shipmentId = "1"; // This would come from the app after they create a job
+  const receiverAttestationUID =
+    "26de1600a24288a1d33ee39914b4ce23f82b7e91d72bd99e99cec3ec25b573b9"; // This would come from the app after they create a job
+  const [courierAttestion, setCourierAttestation] = useState<string | null>(
+    null
+  );
 
   const initiateScan = async () => {
     let command = {
       name: "sign",
       keyNo: 1,
-      message:
-        "26de1600a24288a1d33ee39914b4ce23f82b7e91d72bd99e99cec3ec25b573b9", // TODO: retrieve this from state
+      message: courierAttestion,
     };
 
     let res;
 
+    if (!signer || !address) {
+      toast("Please wait a moment before trying again");
+    }
+
+    setLoading(true);
+    toast("Attesting the delivery, this may take awhile...");
+    const attestationUID = await attestPickupDelivery(
+      ethers.utils.formatBytes32String(shipmentId),
+      `0x${receiverAttestationUID}`,
+      signer!,
+      address! // This would come from the frontend when we select the job
+    );
+    setLoading(false);
+    toast.success("Attestation complete! Please tap the NFC tag");
+    setCourierAttestation(attestationUID);
+    // Do I need to put this on chain?
+
     try {
       // --- request NFC command execution ---
-      res = await execHaloCmdWeb(command, {
-        statusCallback: async (cause: any) => {
-          if (cause === "init") {
-            toast(
-              "Please tap the tag to the back of your smartphone and hold it..."
-            );
-          } else if (cause === "retry") {
-            toast.error(
-              "Something went wrong, please try to tap the tag again..."
-            );
-          } else if (cause === "scanned") {
-            toast.success(
-              "Tag scanned successfully, post-processing the result..."
-            );
-            if (signer && address) {
-              // Sign Transaction here
-              await attestPickupDelivery(
-                command.message, // TODO Edit this
-                command.keyNo.toString(), // TODO Edit this
-                signer,
-                address
-              );
-            }
-          } else {
-            // toast(cause);
-          }
-        },
+      console.log({
+        name: "sign",
+        keyNo: 1,
+        message: attestationUID,
       });
+      res = await execHaloCmdWeb(
+        {
+          name: "sign",
+          keyNo: 1,
+          message: attestationUID.slice(2),
+        },
+        {
+          statusCallback: async (cause: any) => {
+            if (cause === "init") {
+              toast(
+                "Please tap the tag to the back of your smartphone and hold it..."
+              );
+            } else if (cause === "retry") {
+              toast.error(
+                "Something went wrong, please try to tap the tag again..."
+              );
+            } else if (cause === "scanned") {
+              toast.success(
+                "Tag scanned successfully, post-processing the result..."
+              );
+            } else {
+              // toast(cause);
+            }
+          },
+        }
+      );
       // the command has succeeded, display the result to the user
       // toast(JSON.stringify(res, null, 4));
       setRes(res);
@@ -103,9 +129,22 @@ export default function CourierPickup() {
   };
 
   const confirmPickup = async () => {
+    toast.success("Confirming pickup!");
     // Send the signature to the smart contract
     console.log(res);
-    toast.success("Pickup confirming!");
+
+    // What do I do with the result?
+    if (signer && address && res) {
+      // Sign Transaction here
+      console.log("Signing transaction...", res.signature.raw.s);
+      const attestationUID = await attestPickupDelivery(
+        ethers.utils.formatBytes32String(shipmentId),
+        `0x${res.signature.raw.s}`,
+        signer,
+        address // This would come from the frontend when we select the job
+      );
+      console.log({ attestationUID }); // Put this on chain?
+    }
     fetch("/api/pickup")
       .then(() => setSuccess(true))
       .finally(() => setLoading(false));

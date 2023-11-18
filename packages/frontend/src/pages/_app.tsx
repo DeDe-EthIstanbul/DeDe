@@ -59,6 +59,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThirdwebProvider
         supportedWallets={[
           metamaskWallet(),
+          safeWallet({
+            personalWallets: [
+              smartWallet(
+                embeddedWallet({
+                  auth: {
+                    options: ["email", "google"],
+                  },
+                }),
+                config
+              ),
+            ],
+          }),
           smartWallet(
             embeddedWallet({
               auth: {
