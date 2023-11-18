@@ -12,7 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     if (address) {
-      router.push(`/user`);
+      router.push(`/courier`);
     }
   }, [type, address, router]);
 
