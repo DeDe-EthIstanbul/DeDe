@@ -26,7 +26,7 @@ task('new:wallet', 'Generate New Wallet', async (taskArgs, hre) => {
 });
 
 let ACCOUNT;
-let useMnemonic = true;
+let useMnemonic = false;
 
 // Setup Default Values
 let PRIVATE_KEY;
