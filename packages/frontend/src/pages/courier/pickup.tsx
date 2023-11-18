@@ -64,17 +64,17 @@ export default function CourierPickup() {
       return;
     }
 
-    setLoading(true);
-    toast("Attesting the delivery, this may take awhile...");
-    const attestationUID = await attestPickupDelivery(
-      ethers.utils.formatBytes32String(shipmentId),
-      `0x${receiverAttestationUID}`,
-      signer!,
-      address! // This would come from the frontend when we select the job
-    );
-    setLoading(false);
-    toast.success("Attestation complete! Please tap the NFC tag");
-    setCourierAttestation(attestationUID);
+    // setLoading(true);
+    // toast("Attesting the delivery, this may take awhile...");
+    // const attestationUID = await attestPickupDelivery(
+    //   ethers.utils.formatBytes32String(shipmentId),
+    //   `0x${receiverAttestationUID}`,
+    //   signer!,
+    //   address! // This would come from the frontend when we select the job
+    // );
+    // setLoading(false);
+    // toast.success("Attestation complete! Please tap the NFC tag");
+    // setCourierAttestation(attestationUID);
 
     try {
       // --- request NFC command execution ---
@@ -82,7 +82,7 @@ export default function CourierPickup() {
         {
           name: "sign",
           keyNo: 1,
-          message: attestationUID.slice(2),
+          message: receiverAttestationUID,
         },
         {
           statusCallback: async (cause: any) => {
