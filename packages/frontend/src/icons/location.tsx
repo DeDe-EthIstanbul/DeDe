@@ -1,10 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-import { ConnectWallet, lightTheme, useAddress } from "@thirdweb-dev/react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Avatar } from "@ensdomains/thorin";
-
 export default function LocationIcon({ className }: { className?: string }) {
   return (
     <svg
