@@ -11,6 +11,7 @@
     "deploy:optimism_testnet": "hardhat deploy --network optimism_testnet",
     "deploy:taiko_testnet": "hardhat deploy --network taiko_testnet",
     "deploy:gnosis": "hardhat deploy --network gnosis",
+    "deploy:sepolia": "hardhat deploy --network sepolia",
     "wallet": "hardhat new:wallet"
   },
   "author": "2manslkh",
