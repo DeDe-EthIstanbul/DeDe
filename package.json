@@ -6,6 +6,7 @@
     "test": "pnpm -F contracts test",
     "deploy:local": "pnpm -F contracts deploy:local",
     "deploy:dev": "pnpm -F contracts deploy:dev",
+    "deploy:sepolia": "pnpm -F contracts deploy:sepolia",
     "web": "pnpm -F frontend wagmi && pnpm -F frontend dev",
     "new-wallet": "pnpm -F contracts wallet"
   }
