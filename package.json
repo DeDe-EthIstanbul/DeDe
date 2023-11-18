@@ -6,7 +6,9 @@
     "test": "pnpm -F contracts test",
     "deploy:local": "pnpm -F contracts deploy:local",
     "deploy:dev": "pnpm -F contracts deploy:dev",
-    "web": "pnpm -F app wagmi && pnpm -F app dev",
+    "deploy:sepolia": "pnpm -F contracts deploy:sepolia",
+    "deploy:mumbai": "pnpm -F contracts deploy:mumbai",
+    "web": "pnpm -F frontend wagmi && pnpm -F frontend dev",
     "new-wallet": "pnpm -F contracts wallet"
   }
 }

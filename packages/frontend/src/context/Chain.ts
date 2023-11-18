@@ -1,9 +1,9 @@
-import { OptimismGoerli } from "@thirdweb-dev/chains";
+import { Mumbai } from "@thirdweb-dev/chains";
 import { createContext } from "react";
 
 const ChainContext = createContext({
-  selectedChain: OptimismGoerli,
-  setSelectedChain: (chain: any) => {},
+  selectedChain: Mumbai,
+  setSelectedChain: (chain: any) => { },
 });
 
 export default ChainContext;

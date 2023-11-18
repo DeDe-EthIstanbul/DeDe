@@ -11,12 +11,15 @@
     "deploy:optimism_testnet": "hardhat deploy --network optimism_testnet",
     "deploy:taiko_testnet": "hardhat deploy --network taiko_testnet",
     "deploy:gnosis": "hardhat deploy --network gnosis",
+    "deploy:sepolia": "hardhat deploy --network sepolia",
     "wallet": "hardhat new:wallet"
   },
   "author": "2manslkh",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@ethereum-attestation-service/eas-contracts": "^1.3.1",
+    "@ethereum-attestation-service/eas-sdk": "^1.3.3",
     "@ethersproject/hardware-wallets": "^5.7.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",

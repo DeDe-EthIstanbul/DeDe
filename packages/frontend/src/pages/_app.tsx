@@ -1,29 +1,34 @@
 import "@/styles/globals.css";
-import { ThemeProvider } from "styled-components";
-import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
-import type { AppProps } from "next/app";
+
 import {
-  ThirdwebProvider,
-  ConnectWallet,
-  embeddedWallet,
-  smartWallet,
-  safeWallet,
-} from "@thirdweb-dev/react";
-import {
-  OptimismGoerli,
-  TaikoJolnirL2,
-  MantleTestnet,
   ArbitrumSepolia,
-  PolygonZkevmTestnet,
-  LineaTestnet,
-  ScrollSepoliaTestnet,
-  GnosisChiadoTestnet,
-  CeloAlfajoresTestnet,
   BaseSepoliaTestnet,
+  CeloAlfajoresTestnet,
+  GnosisChiadoTestnet,
+  LineaTestnet,
+  MantleTestnet,
+  Mumbai,
+  OptimismGoerli,
+  PolygonZkevmTestnet,
+  ScrollSepoliaTestnet,
+  TaikoJolnirL2,
 } from "@thirdweb-dev/chains";
-import { useState } from "react";
-import ChainContext from "@/context/Chain";
+import {
+  ConnectWallet,
+  ThirdwebProvider,
+  embeddedWallet,
+  metamaskWallet,
+  safeWallet,
+  smartWallet,
+} from "@thirdweb-dev/react";
+import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
 import toast, { Toaster } from "react-hot-toast";
+
+import type { AppProps } from "next/app";
+import ChainContext from "@/context/Chain";
+import { ThemeProvider } from "styled-components";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { useState } from "react";
 
 const theme = {
   ...lightTheme,
@@ -40,12 +45,14 @@ const config = {
 };
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [selectedChain, setSelectedChain] = useState<any>(ArbitrumSepolia);
+  // const [selectedChain, setSelectedChain] = useState<any>(Mumbai);
 
   return (
-    <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
+    <UserProvider>
+      {/* <ChainContext.Provider value={{ selectedChain, setSelectedChain }}> */}
       <ThirdwebProvider
         supportedWallets={[
+          metamaskWallet(),
           smartWallet(
             embeddedWallet({
               auth: {
@@ -54,18 +61,18 @@ export default function App({ Component, pageProps }: AppProps) {
             }),
             config
           ),
-          safeWallet({
-            personalWallets: [
-              embeddedWallet({
-                auth: {
-                  options: ["email", "google"],
-                },
-              }),
-            ],
-          }),
+          // safeWallet({
+          //   personalWallets: [
+          //     embeddedWallet({
+          //       auth: {
+          //         options: ["email", "google"],
+          //       },
+          //     }),
+          //   ],
+          // }),
         ]}
         clientId={process.env.NEXT_PUBLIC_CLIENT_ID}
-        activeChain={selectedChain}
+        activeChain={Mumbai}
         supportedChains={[
           ArbitrumSepolia,
           PolygonZkevmTestnet,
@@ -81,8 +88,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <ThorinGlobalStyles />
           <Component {...pageProps} />
         </ThemeProvider>
+        <Toaster />
       </ThirdwebProvider>
-      <Toaster />
-    </ChainContext.Provider>
+      {/* </ChainContext.Provider> */}
+    </UserProvider>
   );
 }

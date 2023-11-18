@@ -82,10 +82,10 @@ module.exports = {
     },
     hardhat: {
       // TODO: Add snapshot block
-      // forking: {
-      //   url: process.env.ALCHEMY_PROVIDER_MAINNET,
-      //   block: 0,
-      // },
+      forking: {
+        url: process.env.ALCHEMY_PROVIDER_SEPOLIA,
+        block: 4714714,
+      },
       blockGasLimit: 10000000000,
       mining: {
         auto: true,
@@ -116,7 +116,7 @@ module.exports = {
       accounts: ACCOUNT,
     },
     mumbai: {
-      url: 'https://matic-mumbai.chainstacklabs.com',
+      url: 'https://rpc.ankr.com/polygon_mumbai',
       chainId: 80001,
       accounts: ACCOUNT,
       saveDeployments: true,
@@ -201,7 +201,7 @@ module.exports = {
       saveDeployments: true,
     },
     sepolia: {
-      url: 'https://rpc.sepolia.org',
+      url: process.env.ALCHEMY_PROVIDER_SEPOLIA,
       chainId: 11155111,
       accounts: ACCOUNT,
       saveDeployments: true,
@@ -209,6 +209,12 @@ module.exports = {
     thundercore_testnet: {
       url: 'https://testnet-rpc.thundercore.com',
       chainId: 18,
+      accounts: ACCOUNT,
+      saveDeployments: true,
+    },
+    linea_testnet: {
+      url: 'https://rpc.goerli.linea.build',
+      chainId: 59140,
       accounts: ACCOUNT,
       saveDeployments: true,
     },
