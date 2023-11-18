@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Avatar } from "@ensdomains/thorin";
 import LocationIcon from "@/icons/location";
 import JobDetails from "@/components/JobDetails";
+import Navbar from "@/components/Navbar";
 
 const mockData = [
   {
@@ -63,32 +64,25 @@ export default function CourierHome() {
   }, [type, address, router]);
 
   return (
-    <main className="min-h-screen min-w-screen overflow-auto flex flex-col px-6 bg-brand-background text-brand-primary">
-      <nav className="flex flex-row items-center justify-between w-full py-5">
-        <img
-          src={"/assets/dede_logotype.svg"}
-          alt="DeDe"
-          className="w-20 h-auto"
-        />
-        <div className="w-12 h-12">
-          <Avatar label="User Profile" src={"/assets/profile.png"} />
+    <main className="min-h-screen min-w-screen overflow-auto flex flex-col bg-brand-background text-brand-primary">
+      <Navbar />
+      <div className="flex flex-col px-6">
+        <h1 className="font-bold text-xl font-sans mt-4">Available Jobs</h1>
+        <div className="flex flex-col py-4 gap-y-4">
+          {mockData.map((data, index) => {
+            return (
+              <JobDetails
+                key={index}
+                pickUp={data.pickUp}
+                dropOff={data.dropOff}
+                revenue={data.revenue}
+                userRating={data.userRating}
+                dedeScore={data.dedeScore}
+                distance={data.distance}
+              />
+            );
+          })}
         </div>
-      </nav>
-      <h1 className="font-bold text-xl font-sans mt-4">Available Jobs</h1>
-      <div className="flex flex-col py-4 gap-y-4">
-        {mockData.map((data, index) => {
-          return (
-            <JobDetails
-              key={index}
-              pickUp={data.pickUp}
-              dropOff={data.dropOff}
-              revenue={data.revenue}
-              userRating={data.userRating}
-              dedeScore={data.dedeScore}
-              distance={data.distance}
-            />
-          );
-        })}
       </div>
     </main>
   );
