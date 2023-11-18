@@ -3,6 +3,7 @@ import { Disclosure } from "@headlessui/react";
 import LocationIcon from "@/icons/location";
 import StarIcon from "@/icons/star";
 import { useSigner } from "@thirdweb-dev/react";
+import Link from "next/link";
 
 interface IJobDetails {
   pickUp: string;
@@ -68,9 +69,11 @@ export default function JobDetails({
               <p className="font-sans">{dedeScore} DeDe</p>
             </div>
           </div>
-          <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
-            Pick Up
-          </button>
+          <Link href="/courier/pickup">
+            <button className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans">
+              Pick Up
+            </button>
+          </Link>
         </Disclosure.Panel>
       </Disclosure>
     </div>
