@@ -97,14 +97,16 @@ export default function UserHome() {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        setEstimatedCost((Math.random() * 0.3).toFixed(3));
+        setEstimatedCost((Math.random() * 0.03).toFixed(4));
       }, 1000);
     }
+  }, [pickup, dropoff]);
 
+  useEffect(() => {
     if (error) {
       setInTransaction(false);
     }
-  }, [pickup, dropoff, error, loading]);
+  }, [error]);
 
   async function handleConfirmJob() {
     console.log("🚀 | handleConfirmJob | error:", error);
