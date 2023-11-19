@@ -11,6 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId, task }: any
 
   let EAS_ADDRESS;
   let WORLD_ID_ADDRESS;
+  let PUSH_COMM_ADDRESS;
 
   if (chainId == '11155111') {
     EAS_ADDRESS = '0xC2679fBD37d54388Ce493F1DB75320D236e1815e';
@@ -57,16 +58,24 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId, task }: any
     console.log('WORLD ID Not available on this network');
   }
 
+  if (chainId == '80001') {
+    PUSH_COMM_ADDRESS = '0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa'
+  } else {
+    PUSH_COMM_ADDRESS = '0x0000000000000000000000000000000000000000';
+    console.log('PUSH COMM Not available on this network');
+  }
+
+
   let contract = await deploy('DeDe', {
     from: deployer,
     log: true,
-    args: [0, EAS_ADDRESS, WORLD_ID_ADDRESS], //TODO: set correct values
+    args: [0, EAS_ADDRESS, WORLD_ID_ADDRESS, PUSH_COMM_ADDRESS], //TODO: set correct values
   });
 
   // Verify the contract using hardhat verify task
   await hre.run("verify:verify", {
     address: contract.address,
-    constructorArguments: [0, EAS_ADDRESS, WORLD_ID_ADDRESS],
+    constructorArguments: [0, EAS_ADDRESS, WORLD_ID_ADDRESS, PUSH_COMM_ADDRESS],
   });
 
 };

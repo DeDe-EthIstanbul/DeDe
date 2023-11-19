@@ -3,6 +3,7 @@ import {
   ConnectWallet,
   lightTheme,
   useAddress,
+  useChainId,
   useContract,
   useContractWrite,
 } from "@thirdweb-dev/react";
@@ -18,10 +19,12 @@ import { Spinner } from "@ensdomains/thorin";
 // import DeDe Abi
 import dedeAbi from "../utils/DeDeABI.json";
 import dynamic from "next/dynamic";
-import { useDedeContract } from "@/utils/addresses";
+import { getDeDe } from "../generated";
 import { useEAS } from "@/utils/attestations";
 import { useRouter } from "next/router";
 import { utils } from "ethers";
+
+// import { useDedeContract } from "@/utils/addresses";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
@@ -33,12 +36,20 @@ export default function UserHome() {
   const [cost, setCost] = useState<string | undefined>();
   const [estimatedCost, setEstimatedCost] = useState<string>("0.00");
   const [isOpen, setIsOpen] = useState(false);
+  const chainId = useChainId();
+  console.log("🚀 | UserHome | chainId:", chainId);
 
   let eas = useEAS();
   console.log(eas);
 
-  let dede = useDedeContract();
-  let { contract } = useContract(dede, dedeAbi);
+  let dede;
+
+  if (chainId) {
+    dede = getDeDe({ chainId: chainId as any });
+    console.log("🚀 | UserHome | dede:", dede);
+  }
+  let { contract } = useContract(dede?.address, dedeAbi);
+  console.log("🚀 | UserHome | dede?.address:", dede?.address);
 
   let { mutateAsync, isLoading, error } = useContractWrite(
     contract,

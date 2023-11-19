@@ -10,6 +10,9 @@ import { NO_EXPIRATION_TIME, EMPTY_UID } from "@ethereum-attestation-service/eas
 import { WorldIDEnabled, IWorldID } from "./WorldIDEnabled.sol";
 import { ByteHasher } from "./helpers/ByteHasher.sol";
 
+import { IPUSHCommInterface } from "./interfaces/IPUSHCommInterface.sol";
+import { LibPush } from "./helpers/LibPush.sol";
+
 contract DeDe is WorldIDEnabled, SchemaResolver {
     using ByteHasher for bytes;
 
@@ -21,6 +24,8 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
     mapping(uint => bool) public pickedUpShipments;
     mapping(uint => bool) public fulfilledShipments;
     mapping(address => uint) public withdrawableBalance;
+    uint public deliveryIndex;
+    IPUSHCommInterface push;
 
     enum ShipmentState {
         REQUESTED,
@@ -72,6 +77,7 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
      */
     struct ShipmentRequestedParams {
         uint bounty;
+        uint deliveryIndex;
         // uint packageValue;
         // address sender;
         // address receiver;
@@ -105,10 +111,12 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
     constructor(
         uint _settlementDuration,
         IEAS _eas,
-        IWorldID _worldId
+        IWorldID _worldId,
+        IPUSHCommInterface _push
     ) payable SchemaResolver(_eas) WorldIDEnabled(_worldId) {
         settlementDuration = _settlementDuration;
         eas = _eas;
+        push = _push;
     }
 
     function onAttest(Attestation calldata attestation, uint256 /*value*/) internal override returns (bool) {
@@ -140,7 +148,10 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
         // require(msg.value >= request.bounty, "Shipment cost insufficient");
         // uint stakeAmount = request.packageValue / 2;
 
-        ShipmentRequestedParams memory request = ShipmentRequestedParams({ bounty: msg.value });
+        ShipmentRequestedParams memory request = ShipmentRequestedParams({
+            bounty: msg.value,
+            deliveryIndex: currentId
+        });
 
         Shipment memory shipment = Shipment({
             id: currentId,
@@ -173,6 +184,12 @@ contract DeDe is WorldIDEnabled, SchemaResolver {
                 })
             })
         );
+
+        // If Push address is set, send notification
+        if (address(push) != address(0)) {
+            LibPush.sendDeliveryRequestedNotification(push, request.bounty);
+        }
+
         return uid;
     }
 

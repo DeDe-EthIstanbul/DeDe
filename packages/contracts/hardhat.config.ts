@@ -228,6 +228,11 @@ module.exports = {
       chainId: 44787,
       accounts: ACCOUNT,
       saveDeployments: true,
+      verify: {
+        etherscan: {
+          apiKey: '8NH96QIJ4ZVR6SN7Z89EVA6JIE1JHY16NS',
+        },
+      },
     },
     polygon_zkvm_testnet: {
       url: 'https://rpc.public.zkevm-test.net',
