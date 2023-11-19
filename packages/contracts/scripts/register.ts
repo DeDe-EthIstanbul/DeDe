@@ -1,4 +1,4 @@
-import { deployments, ethers } from "hardhat";
+import { deployments, ethers, getChainId } from "hardhat";
 
 import { DeDe } from "../typechain";
 import { SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
@@ -7,9 +7,42 @@ async function main() {
 
   // Get Signer
   const [signer] = await ethers.getSigners();
+  const chainId = await getChainId();
 
-  // let schemaRegistryContractAddress = "0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0";
-  let schemaRegistryContractAddress = "0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797" // Mumbai Schema Registry v0.26
+  let schemaRegistryContractAddress;
+
+
+  if (chainId == '11155111') {
+    schemaRegistryContractAddress = '0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0';
+  } else if (chainId == '84531') {
+    // base testnet
+    schemaRegistryContractAddress = '0x4200000000000000000000000000000000000020';
+  } else if (chainId == '534353') {
+    // scroll testnet
+    schemaRegistryContractAddress = '0x0000000000000000000000000000000000000001';
+    console.log('EAS schema registry not available on Scroll Testnet');
+  } else if (chainId == '59140') {
+    // linea testnet
+    schemaRegistryContractAddress = '0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797';
+  } else if (chainId == '5001') {
+    // mantle testnet
+    schemaRegistryContractAddress = '0x0000000000000000000000000000000000000001';
+    console.log('EAS schema registry not available on Mantle Testnet');
+  } else if (chainId == '10200') {
+    // gnosis testnet
+    schemaRegistryContractAddress = '0x0000000000000000000000000000000000000001';
+    console.log('EAS schema registry not available on Gnosis Testnet');
+  } else if (chainId == '421613') {
+    // arbitrum testnet
+    schemaRegistryContractAddress = '0xaEF4103A04090071165F78D45D83A0C0782c2B2a';
+  } else if (chainId == '80001') {
+    // mumbai testnet
+    schemaRegistryContractAddress = '0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797';
+  } else {
+    schemaRegistryContractAddress = '0x0000000000000000000000000000000000000001';
+    console.log('EAS schema registry not available on this network');
+  }
+
   const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
   //@ts-ignore
   schemaRegistry.connect(signer);
