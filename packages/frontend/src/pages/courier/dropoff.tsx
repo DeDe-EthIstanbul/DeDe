@@ -7,7 +7,7 @@ import {
   useAddress,
   useSigner,
 } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import Lottie from "react-lottie";
@@ -18,6 +18,9 @@ import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
+import BouncingLoader from "@/components/BouncingLoader";
+import ReactCanvasConfetti from "react-canvas-confetti";
+import Link from "next/link";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
@@ -55,6 +58,68 @@ export default function CourierDropoff() {
   const [courierAttestion, setCourierAttestation] = useState<string | null>(
     null
   );
+
+  const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  const canvasStyles = {
+    position: "fixed",
+    pointerEvents: "none",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
+  };
+
+  const refAnimationInstance = useRef<any>(null);
+
+  const getInstance = useCallback((instance: null) => {
+    refAnimationInstance.current = instance;
+  }, []);
+
+  const makeShot = useCallback((particleRatio: number, opts: any) => {
+    refAnimationInstance.current &&
+      refAnimationInstance.current({
+        ...opts,
+        origin: { y: 0.7 },
+        particleCount: Math.floor(200 * particleRatio),
+      });
+  }, []);
+
+  const fire = useCallback(() => {
+    makeShot(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+
+    makeShot(0.2, {
+      spread: 60,
+    });
+
+    makeShot(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+
+    makeShot(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+
+    makeShot(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  }, [makeShot]);
 
   const initiateScan = async () => {
     let res;
@@ -101,6 +166,7 @@ export default function CourierDropoff() {
   };
 
   const confirmDropoff = async () => {
+    setLoading(true);
     toast.success("Confirming delivery!");
     console.log(res);
     // Send the signature to the smart contract
@@ -117,34 +183,60 @@ export default function CourierDropoff() {
       console.log({ attestationUID });
     }
     fetch("/api/dropoff")
-      .then(() => setSuccess(true))
+      .then(() => {
+        setSuccess(true);
+        setIsOpen(false);
+        fire();
+      })
       .finally(() => setLoading(false));
-    setLoading(true);
   };
 
   return (
     <main className="min-h-screen min-w-screen overflow-auto flex flex-col bg-brand-background text-brand-primary">
       <Navbar />
-      <div className="flex flex-col w-full items-center justify-center px-6">
-        <h1 className="font-bold text-xl font-sans mt-4">
-          Tap Delivery NFC Tag
-        </h1>
-        <p className="font-sans text-center my-12">
-          You can find the NFC tag on the door, gate, locker or within the
-          vicinity of your delivery location.
-        </p>
-        <div className="flex rounded-lg overflow-hidden">
-          <video autoPlay muted loop playsInline>
-            <source src="https://cdn.shopify.com/videos/c/o/v/dec57e414a004196b03a49f3fafc4e7c.mp4" />
-          </video>
+      {success ? (
+        <div className="flex flex-col w-full items-center justify-center px-6 py-8">
+          <Lottie options={defaultOptions} height={128} width={128} />
+          <h1 className="font-bold text-xl font-sans mt-4">
+            Your delivery was successful!
+          </h1>
+          <p className="font-sans text-center my-12">
+            Congratulations on your delivery! It is that easy to earn money with
+            DeDe. Thank you letting us be a part of your journey to success. ❤️
+          </p>
+          <img
+            src="/assets/dede_logo.png"
+            alt="DeDe"
+            className="w-28 h-auto my-6"
+          />
+          <Link href={"/courier"}>
+            <button className="font-bold w-full bg-brand-primary rounded-lg py-3 px-6 text-brand-text font-sans mt-6">
+              Back to home
+            </button>
+          </Link>
         </div>
-        <button
-          className="font-bold w-full bg-brand-primary rounded-lg py-3 text-brand-text font-sans mt-14"
-          onClick={initiateScan}
-        >
-          Initiate Scan
-        </button>
-      </div>
+      ) : (
+        <div className="flex flex-col w-full items-center justify-center px-6">
+          <h1 className="font-bold text-xl font-sans mt-4">
+            Tap Delivery NFC Tag
+          </h1>
+          <p className="font-sans text-center my-12">
+            You can find the NFC tag on the door, gate, locker or within the
+            vicinity of your delivery location.
+          </p>
+          <div className="flex rounded-lg overflow-hidden">
+            <video autoPlay muted loop playsInline>
+              <source src="https://cdn.shopify.com/videos/c/o/v/dec57e414a004196b03a49f3fafc4e7c.mp4" />
+            </video>
+          </div>
+          <button
+            className="font-bold w-full bg-brand-primary rounded-lg py-3 text-brand-text font-sans mt-14"
+            onClick={initiateScan}
+          >
+            Initiate Scan
+          </button>
+        </div>
+      )}
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         {success ? (
           <div className="flex flex-col items-center justify-center">
@@ -168,21 +260,30 @@ export default function CourierDropoff() {
             <p className="font-bold text-xl font-sans text-brand-primary mb-3">
               Confirm Delivery?
             </p>
-            <p className="text-sm font-sans text-brand-primary text-center">
+            <p className="text-sm font-sans text-brand-primary text-center mb-11">
               Please ensure that your delivery items are correct. This action is
               irreversible. Your DeDe score will be updated and your payment
               will be awarded once the shipment is settled.
             </p>
-            <img
-              src="/assets/dede_logo.png"
-              alt="DeDe"
-              className="w-28 h-auto my-11"
-            />
+            {loading ? (
+              <BouncingLoader
+                isInTransaction={loading}
+                setInTransaction={setLoading}
+                isLoading={loading}
+              />
+            ) : (
+              <img
+                src="/assets/dede_logo.png"
+                alt="DeDe"
+                className="w-28 h-auto"
+              />
+            )}
             <button
-              className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
+              disabled={loading}
+              className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans mt-11 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={confirmDropoff}
             >
-              Confirm Delivery
+              {loading ? "Confirming..." : "Confirm Delivery"}
             </button>
             <button
               className="font-bold w-full text-brand-primary rounded-lg py-3 font-sans mt-2"
@@ -193,6 +294,10 @@ export default function CourierDropoff() {
           </div>
         )}
       </Modal>
+      <ReactCanvasConfetti
+        refConfetti={getInstance as any}
+        style={canvasStyles as any}
+      />
     </main>
   );
 }

@@ -25,49 +25,6 @@ import { utils } from "ethers";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
-const mockData = [
-  {
-    pickUp: "New York, 45700",
-    dropOff: "New York, 45700",
-    revenue: "Ξ 0.024",
-    userRating: "4.2",
-    dedeScore: 250,
-    distance: 87,
-  },
-  {
-    pickUp: "New York, 45700",
-    dropOff: "New York, 45700",
-    revenue: "Ξ 0.024",
-    userRating: "4.2",
-    dedeScore: 250,
-    distance: 87,
-  },
-  {
-    pickUp: "New York, 45700",
-    dropOff: "New York, 45700",
-    revenue: "Ξ 0.024",
-    userRating: "4.2",
-    dedeScore: 250,
-    distance: 87,
-  },
-  {
-    pickUp: "New York, 45700",
-    dropOff: "New York, 45700",
-    revenue: "Ξ 0.024",
-    userRating: "4.2",
-    dedeScore: 250,
-    distance: 87,
-  },
-  {
-    pickUp: "New York, 45700",
-    dropOff: "New York, 45700",
-    revenue: "Ξ 0.024",
-    userRating: "4.2",
-    dedeScore: 250,
-    distance: 87,
-  },
-];
-
 export default function UserHome() {
   const [loading, setLoading] = useState(false);
   const [inTransaction, setInTransaction] = useState(false);
@@ -76,10 +33,6 @@ export default function UserHome() {
   const [cost, setCost] = useState<string | undefined>();
   const [estimatedCost, setEstimatedCost] = useState<string>("0.00");
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState(0);
-
-  const address = useAddress();
-  const router = useRouter();
 
   let eas = useEAS();
   console.log(eas);
@@ -116,7 +69,7 @@ export default function UserHome() {
     let { receipt } = await mutateAsync({
       args: ["0x6860542E55Fb9292e4c8b478FcEec724d3351C2e"],
       overrides: {
-        value: utils.parseEther("0.01"), // send 0.1 native token with the contract call
+        value: utils.parseEther(cost || "0.00"),
       },
     });
     setInTransaction(false);
