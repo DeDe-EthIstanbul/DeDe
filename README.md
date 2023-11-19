@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/Logo.png" width=400/>
+<img src="./docs/Logo.png" width=400/>
 
 <p align="center">
 Your Decentralized Delivery Network
