@@ -139,8 +139,8 @@ export default function CourierPickup() {
     fetch("/api/pickup")
       .then(() => {
         setSuccess(true);
-        setLoading(false);
-        router.push("/courier/dropoff");
+        // setLoading(false);
+        // router.push("/courier/dropoff");
       })
       .finally(() => {
         setLoading(false);
@@ -168,6 +168,14 @@ export default function CourierPickup() {
         >
           Initiate Scan
         </button>
+        {success && (
+          <button
+            className="font-bold w-full rounded-lg py-3 text-brand-primary font-sans mt-14"
+            onClick={() => router.push("/courier/dropoff")}
+          >
+            Drop Off Parcel
+          </button>
+        )}
       </div>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         {success ? (
