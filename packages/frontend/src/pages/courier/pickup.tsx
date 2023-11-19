@@ -18,6 +18,7 @@ import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
+import BouncingLoader from "@/components/BouncingLoader";
 
 const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
 
@@ -118,6 +119,7 @@ export default function CourierPickup() {
   };
 
   const confirmPickup = async () => {
+    setLoading(true);
     toast.success("Confirming pickup!");
     // Send the signature to the smart contract
     console.log(res);
@@ -135,9 +137,14 @@ export default function CourierPickup() {
       console.log({ attestationUID }); // Put this on chain?
     }
     fetch("/api/pickup")
-      .then(() => setSuccess(true))
-      .finally(() => setLoading(false));
-    setLoading(true);
+      .then(() => {
+        setSuccess(true);
+        // setLoading(false);
+        // router.push("/courier/dropoff");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -161,6 +168,14 @@ export default function CourierPickup() {
         >
           Initiate Scan
         </button>
+        {success && (
+          <button
+            className="font-bold w-full rounded-lg py-3 text-brand-primary font-sans mt-14"
+            onClick={() => router.push("/courier/dropoff")}
+          >
+            Drop Off Parcel
+          </button>
+        )}
       </div>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         {success ? (
@@ -186,21 +201,30 @@ export default function CourierPickup() {
             <p className="font-bold text-xl font-sans text-brand-primary mb-3">
               Confirm Pickup?
             </p>
-            <p className="text-sm font-sans text-brand-primary text-center">
+            <p className="text-sm font-sans text-brand-primary text-center mb-11">
               Failure to deliver your parcel will result in a penalty. Your DeDe
               score will be reduced and you may be charged a fee based on the
               item value.
             </p>
-            <img
-              src="/assets/dede_logo.png"
-              alt="DeDe"
-              className="w-28 h-auto my-11"
-            />
+            {loading ? (
+              <BouncingLoader
+                isInTransaction={loading}
+                setInTransaction={setLoading}
+                isLoading={loading}
+              />
+            ) : (
+              <img
+                src="/assets/dede_logo.png"
+                alt="DeDe"
+                className="w-28 h-auto"
+              />
+            )}
             <button
-              className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans"
+              disabled={loading}
+              className="font-bold w-full bg-brand-primary rounded-lg py-3 text-white font-sans mt-11 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={confirmPickup}
             >
-              Confirm Pick Up
+              {loading ? "Confirming..." : "Confirm Pick Up"}
             </button>
             <button
               className="font-bold w-full text-brand-primary rounded-lg py-3 font-sans mt-2"
