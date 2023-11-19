@@ -19,10 +19,10 @@ DeDe (Decentralized Delivery Network) is designed to improve the traditional del
 
 ## Video Demo
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qJX8pv7H0ac?si=uUFirC5o0pNiY1tp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Deck
 
-![1](https://github.com/DeDe-EthIstanbul/DeDe/assets/23635326/887885f9-9647-41ab-acae-fa329219490e)
 ![2](https://github.com/DeDe-EthIstanbul/DeDe/assets/23635326/0bd707f5-6909-4f62-baa4-6b2cbe9b1e78)
 ![3](https://github.com/DeDe-EthIstanbul/DeDe/assets/23635326/7132d002-40db-42bc-9c31-db23de75d8a7)
 ![4](https://github.com/DeDe-EthIstanbul/DeDe/assets/23635326/263347d3-9896-4c3b-b8d7-20ffd675dd03)
