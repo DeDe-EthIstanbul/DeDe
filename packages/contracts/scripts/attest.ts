@@ -12,9 +12,9 @@ async function main() {
   const [signer] = await ethers.getSigners();
 
   // Get DeDe contract
-  let dede: DeDe = (await ethers.getContractAt("DeDe", "0xcdb2dd3D8b1C8f2b5f8ef735edd6F3eC53E896D3")) as DeDe;
+  let dede: DeDe = (await ethers.getContractAt("DeDe", "0x5B9Ef821d9e80B977Fd92255402caF83CdBa605B")) as DeDe;
   dede = dede.connect(signer);
-  let result = await dede.requestShipment({ bounty: 1, packageValue: 10, receiver: "0xcdb2dd3D8b1C8f2b5f8ef735edd6F3eC53E896D3", sender: "0xcdb2dd3D8b1C8f2b5f8ef735edd6F3eC53E896D3" })
+  let result = await dede.requestShipment("0x5B9Ef821d9e80B977Fd92255402caF83CdBa605B", { value: ethers.utils.parseEther("0.0001") })
   console.log("🚀 | main | result:", result)
 }
 
