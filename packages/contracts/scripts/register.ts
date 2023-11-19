@@ -9,7 +9,7 @@ async function main() {
   const [signer] = await ethers.getSigners();
 
   // let schemaRegistryContractAddress = "0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0";
-  let schemaRegistryContractAddress = "0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797"
+  let schemaRegistryContractAddress = "0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797" // Mumbai Schema Registry v0.26
   const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
   //@ts-ignore
   schemaRegistry.connect(signer);
@@ -36,7 +36,7 @@ async function main() {
   // }
   let schema, resolverAddress, revocable, transaction
 
-  schema = "uint bounty";
+  schema = "uint bounty, uint deliveryIndex";
   resolverAddress = "0x0000000000000000000000000000000000000000"
   revocable = true;
 
