@@ -11,7 +11,9 @@ function readDeployments() {
 
   // Read .chainId from each folder and set as key of out object
   folders.forEach((folder) => {
-    const chainId = fs.readFileSync(`../contracts/deployments/${folder}/.chainId`).toString();
+    const chainId = fs
+      .readFileSync(`../contracts/deployments/${folder}/.chainId`)
+      .toString();
 
     // Loop through each JSON file found in the folder
     const files = fs.readdirSync(`../contracts/deployments/${folder}`);
@@ -25,8 +27,8 @@ function readDeployments() {
 
       // Set the key of the out object to be the contract name
       // and the value to be the address of the contract
-      out[file.split(".")[0]] = {
-        ...out[file.split(".")[0]],
+      (out as any)[file.split(".")[0] as any] = {
+        ...(out as any)[file.split(".")[0] as any],
         [chainId]: json.address,
       };
     });
