@@ -37,7 +37,7 @@ broadcast
 /broadcast/**/dry-run/
 
 # Docs
-docs/
+# docs/
 
 # Circuits
 packages/circuits/zkPv1/*
