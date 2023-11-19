@@ -10,16 +10,13 @@
 💡 Live Site: 
 <https://dede-seven.vercel.app/>
 
-
-
-
 ## Motivation
 
 DeDe (Decentralized Delivery Network) is designed to improve the traditional delivery service landscape. It addresses critical issues like high delivery costs, tracking inaccuracies, limited service reach, and unfair courier compensation. By leveraging blockchain technology, DeDe ensures direct transactions between customers and couriers, leading to fairer compensation and reduced overall costs. The platform employs Proof of Interaction using ARX’s proprietary technolofy for real-time, accurate tracking, enhancing customer trust and courier accountability. Additionally, DeDe introduces a unique scoring system, the DeDe Score, based on courier performance and sender reliability, fostering trust within the network. The platform also features an anonymous messaging system for secure communication among participants. DeDe is not just a delivery service; it's a comprehensive ecosystem designed to make deliveries more efficient, transparent, and fair for all stakeholders. 
 
 ## Video Demo
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/qJX8pv7H0ac?si=uUFirC5o0pNiY1tp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![Watch the video](https://img.youtube.com/vi/qJX8pv7H0ac/hqdefault.jpg)](https://www.youtube.com/embed/qJX8pv7H0ac)
 
 ## Deck
 
